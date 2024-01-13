@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createEdgeRouter } from "next-connect";
 import { allRooms } from "@/backend/controllers/roomController";
+import connectToDB from "@/backend/config/db.Connect";
 
 
 /**
@@ -19,7 +20,7 @@ interface RequestContext {
 }
 
 const router = createEdgeRouter<NextRequest,RequestContext>();
-
+connectToDB();
 router.get(allRooms);
 
 export async function GET(request:NextRequest,ctx:RequestContext) {
