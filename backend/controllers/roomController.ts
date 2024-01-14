@@ -14,6 +14,7 @@ export const getAllRooms = async (request: NextRequest) => {
   });
 };
 
+// Add new Room
 export const addNewRoom = async (request: NextRequest) => {
   const body = await request.json();
 
@@ -25,6 +26,7 @@ export const addNewRoom = async (request: NextRequest) => {
   });
 };
 
+// Get room details
 export const getRoomDetails = async (
   request: NextRequest,
   { params }: { params: { id: string } }
@@ -40,4 +42,31 @@ export const getRoomDetails = async (
   }
 
   return NextResponse.json({ Success: true, room });
+};
+
+// Update room details
+
+export const updateRoomDetails = async (
+  request: NextRequest,
+  { params }: { params: { id: string } }
+) => {
+  let room = await Room.findById(params.id);
+  const body = await request.json();
+
+  if (!room) {
+    return NextResponse.json(
+      {
+        error: "Room not found!",
+      },
+      { status: 404 }
+    );
+  }
+
+  // 1. id | 2. data to be updated | 3. new:true - It will give updated data of room.
+  room = await Room.findByIdAndUpdate(params.id, body, { new: true });
+
+  return NextResponse.json({
+    Success: true,
+    room,
+  });
 };
