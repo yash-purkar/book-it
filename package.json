@@ -1,3 +1,9 @@
+// 1st we need to compile the ts file to js
+    // tsc seeder/seeder.ts - It will compile that file to js
+    // --outDir .temp - It will create .temp folder in root and will put the compile file in that directory
+    // node .temp/seeder/seeder.ts - It will run that compiled file
+    // rm --rf .temp - It will remove that folder after seeding the data
+    // to run this we can use  - npm run seeder
 {
   "name": "book-it",
   "version": "0.1.0",
@@ -6,7 +12,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "seeder" : "tsc seeder/seeder.ts --outDir .temp && node .temp/seeder/seeder.js && rm --rf .temp"
   },
   "dependencies": {
     "mongoose": "^8.0.4",
