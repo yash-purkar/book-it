@@ -4,7 +4,7 @@
 const nextConfig = {
     env: {
         DB_LOCAL_URI : 'mongodb://127.0.0.1:27017/book-it',
-        DB_URI : ""
+        DB_URI : " "
     }
 }
 
