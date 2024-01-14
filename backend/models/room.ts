@@ -1,4 +1,4 @@
-import mongoose, { ObjectId, Schema, mongo } from "mongoose";
+import mongoose, { ObjectId, Schema } from "mongoose";
 
 interface ILocation {
   type: string;
@@ -146,7 +146,7 @@ const roomSchema: Schema = new Schema({
   user: {
     type: mongoose.SchemaTypes.ObjectId,
     ref: "User",
-    required: true,
+    required: false,
   },
 
   createdAt: {
