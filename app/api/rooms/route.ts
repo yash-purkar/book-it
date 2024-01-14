@@ -1,0 +1,36 @@
+import { NextRequest, NextResponse } from "next/server";
+import { createEdgeRouter } from "next-connect";
+import { addNewRoom, getAllRooms } from "@/backend/controllers/roomController";
+import connectToDB from "@/backend/config/db.Connect";
+
+
+/**
+ * createEdgeRoute - For creating instance of router with given types
+ * NextRequest - Upcoming HTTP Req type
+ * RequestContext - Contains params or additional info to the route
+ *
+ * router.get() - For get requests on this route it will handle using given controller.
+ * router.run() - It is responsible for executing the appropriate route handler based on the HTTP method path specified in the incoming request.
+ */
+
+interface RequestContext {
+    params :{
+        id:string;
+    }
+}
+
+const router = createEdgeRouter<NextRequest,RequestContext>();
+connectToDB();
+
+router.get(getAllRooms);
+router.post(addNewRoom);
+
+// It will call for all GET requests on this route.
+export async function GET(request:NextRequest,ctx:RequestContext) {
+    return router.run(request,ctx);
+}
+
+// It will call for all POST requests on this route.
+export async function POST(request:NextRequest,ctx:RequestContext) {
+    return router.run(request,ctx);
+}
