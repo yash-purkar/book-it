@@ -1,3 +1,4 @@
+ basic_set_up_reverted_changes
 /** @type {import('next').NextConfig} 
  * DB_LOCAL_URI - Default port for mongodb to run locally.
 */
@@ -7,5 +8,4 @@ const nextConfig = {
         DB_URI : " "
     }
 }
-
 module.exports = nextConfig

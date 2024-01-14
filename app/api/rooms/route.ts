@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createEdgeRouter } from "next-connect";
-import { allRooms } from "@/backend/controllers/roomController";
+import { addNewRoom, getAllRooms } from "@/backend/controllers/roomController";
 import connectToDB from "@/backend/config/db.Connect";
 
 
@@ -21,8 +21,16 @@ interface RequestContext {
 
 const router = createEdgeRouter<NextRequest,RequestContext>();
 connectToDB();
-router.get(allRooms);
 
+router.get(getAllRooms);
+router.post(addNewRoom);
+
+// It will call for all GET requests on this route.
 export async function GET(request:NextRequest,ctx:RequestContext) {
-    return router.run(request,ctx)
+    return router.run(request,ctx);
+}
+
+// It will call for all POST requests on this route.
+export async function POST(request:NextRequest,ctx:RequestContext) {
+    return router.run(request,ctx);
 }
