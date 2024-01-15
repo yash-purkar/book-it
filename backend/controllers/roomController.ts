@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import Room from "@/backend/models/room";
+import ErrorHandler from "../utils/errorHandler";
 
 // get all rooms  - api/rooms
 export const getAllRooms = async (request: NextRequest) => {
@@ -32,17 +33,21 @@ export const getRoomDetails = async (
   request: NextRequest,
   { params }: { params: { id: string } }
 ) => {
-  const room = await Room.findById(params.id);
-  if (!room) {
+  try {
+    const room = await Room.findById(params.id);
+    throw new ErrorHandler("Room not found", 404);
+    if (!room) {
+    }
+    return NextResponse.json({ Success: true, room });
+  } catch (error: any) {
+    console.log(error);
     return NextResponse.json(
       {
-        error: "Room not found",
+        error: error.message,
       },
-      { status: 404 }
+      { status: error.statusCode }
     );
   }
-
-  return NextResponse.json({ Success: true, room });
 };
 
 // Update room details -> /api/admin/rooms/:id
@@ -87,7 +92,7 @@ export const deleteRoom = async (
   }
 
   return NextResponse.json({
-    Success:true,
-    message:"Room Deleted Successfully."
-  })
+    Success: true,
+    message: "Room Deleted Successfully.",
+  });
 };
