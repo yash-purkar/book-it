@@ -2,14 +2,31 @@ import { NextRequest, NextResponse } from "next/server";
 import Room from "@/backend/models/room";
 import ErrorHandler from "../utils/errorHandler";
 import { catchAsyncError } from "../middlewares/catchAsyncError";
+import APIFilters from "../utils/apiFilters";
 
 // get all rooms  - api/rooms
 export const getAllRooms = catchAsyncError(async (request: NextRequest) => {
   // For pagination, 8 results per page
   const resultsPerPage: number = 8;
 
-  const rooms = await Room.find();
+  // To read the url params
+  const { searchParams } = new URL(request.url);
 
+  const queryStr:any = {};
+
+  // There is a forEach method in URL class that's why we can use this forEach here on object.
+  // Value represents the value of query and key is key.
+  // e.g - { value: 'delhi', key: 'location' }
+
+  searchParams.forEach((value, key) => {
+    queryStr[key] = value
+  });
+
+  // Creating instance of APIFilters class and passing Room model and queryStr
+  const apiFilters = new APIFilters(Room,queryStr).search();
+
+  const rooms =  await apiFilters.query;
+  
   return NextResponse.json({
     Success: true,
     resultsPerPage,
