@@ -11,13 +11,29 @@ type ControllerFunction = (
   params: any
 ) => Promise<NextResponse>;
 
+type ValidationError = {
+  message:string
+}
+
 // Higher order function to handle async errors.
 export const catchAsyncError =
-  (controller: ControllerFunction) => async (request: NextRequest, params: any) => {
+  (controller: ControllerFunction) =>
+  async (request: NextRequest, params: any) => {
     try {
       // executing provided controller fn.
       return await controller(request, params);
     } catch (error: any) {
+      // If we call api/rooms/65a3a1aacb7b8ff82335e396f with any extra value in this case f is extra so it throws castError
+      if (error.name === "CastError") {
+        error.message = `Resource not found. Invalid ${error.path}`;
+        error.statusCode = 400;
+      }
+      // when will add a room and didn't pass any required field it will throw Validaion error.
+      if(error.name === "ValidationError") {
+        // If we didn't add more than 1 field it will give an object of all errors.
+        error.message = Object.values<ValidationError>(error.errors).map((value) => value.message);
+        error.statusCode = 400;
+      }
       return NextResponse.json(
         {
           error: error.message,
