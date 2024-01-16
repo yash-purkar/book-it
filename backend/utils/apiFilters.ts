@@ -31,12 +31,25 @@ class APIFilters {
   filter(): APIFilters {
     const queryCopy = {...this.queryStr};
     // Remove unwanted queries.
-    const removeQueries = ['location'];
+    const removeQueries = ['location','page'];
     removeQueries.forEach((value) => delete queryCopy[value]);
 
     // /api/rooms?guestCapacity=3&numOfBeds=2  -> it will find {guestCapacity=3&numOfBeds=2} Both should be match.
     this.query = this.query.find(queryCopy);
 
+    return this;
+  }
+
+  pagination(resultPerPage:number): APIFilters{
+    const currentPage = this.queryStr?.page || 1;
+
+    const skipCount = resultPerPage * (currentPage - 1);
+    /*
+    If current page is 2 and resultPerPage is 5 Now I wanna skip first 5 so I will show from 6 to 10. 
+    skipCount = 5 * (2 - 1); so it will be 5 so 5 will be skip.
+    */
+
+    this.query = this.query.limit(resultPerPage).skip(skipCount);
     return this;
   }
 }
