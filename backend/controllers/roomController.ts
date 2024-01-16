@@ -23,7 +23,8 @@ export const getAllRooms = catchAsyncError(async (request: NextRequest) => {
   });
 
   // Creating instance of APIFilters class and passing Room model and queryStr
-  const apiFilters = new APIFilters(Room,queryStr).search();
+  const apiFilters = new APIFilters(Room,queryStr).search().filter();
+  // We can call filter() after it bcz search() returning this.
 
   const rooms =  await apiFilters.query;
   

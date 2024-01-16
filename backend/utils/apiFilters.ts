@@ -27,6 +27,18 @@ class APIFilters {
     this.query = this.query.find({ ...location });
     return this;
   }
+
+  filter(): APIFilters {
+    const queryCopy = {...this.queryStr};
+    // Remove unwanted queries.
+    const removeQueries = ['location'];
+    removeQueries.forEach((value) => delete queryCopy[value]);
+
+    // /api/rooms?guestCapacity=3&numOfBeds=2  -> it will find {guestCapacity=3&numOfBeds=2} Both should be match.
+    this.query = this.query.find(queryCopy);
+
+    return this;
+  }
 }
 
 export default APIFilters;
@@ -35,4 +47,6 @@ export default APIFilters;
 // And constructor() will assign this values accordingly.
 // If we are calling search() for location - It will check is location there in queryStr.
 // If that is there then we are returning the object with which we are applying filter and if not the empty object.
-// regex will search the query in address.
+// regex will search the query in address. - regex will help us to search in given key not actual match.
+// It will find like this find({address:'givenstring'});
+
