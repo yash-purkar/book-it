@@ -17,7 +17,7 @@ class APIFilters {
   search(): APIFilters {
     const location = this.queryStr.location
       ? {
-        // If we have location then we will find in db in address field.
+          // If we have location then we will find in db in address field.
           address: {
             $regex: this.queryStr.location,
             $options: "i", // Case insensitive
@@ -29,9 +29,9 @@ class APIFilters {
   }
 
   filter(): APIFilters {
-    const queryCopy = {...this.queryStr};
+    const queryCopy = { ...this.queryStr };
     // Remove unwanted queries.
-    const removeQueries = ['location','page'];
+    const removeQueries = ["location", "page"];
     removeQueries.forEach((value) => delete queryCopy[value]);
 
     // /api/rooms?guestCapacity=3&numOfBeds=2  -> it will find {guestCapacity=3&numOfBeds=2} Both should be match.
@@ -40,7 +40,7 @@ class APIFilters {
     return this;
   }
 
-  pagination(resultPerPage:number): APIFilters{
+  pagination(resultPerPage: number): APIFilters {
     const currentPage = this.queryStr?.page || 1;
 
     const skipCount = resultPerPage * (currentPage - 1);
@@ -62,4 +62,11 @@ export default APIFilters;
 // If that is there then we are returning the object with which we are applying filter and if not the empty object.
 // regex will search the query in address. - regex will help us to search in given key not actual match.
 // It will find like this find({address:'givenstring'});
-
+// $regex: this.queryStr.location: This means that this.queryStr.location is treated as a pattern, not an exact match.
+/**
+ * * E.g location query is "house"
+ * * and address in db is  - "new street, house no.1"
+ * * using regex it will return the address bcz house is there in string.
+ * * without regex - it will not return this because house doesn't match with the addres : "house" so it won't return this.
+ */
+//
