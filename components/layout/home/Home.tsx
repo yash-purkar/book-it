@@ -1,9 +1,20 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import styles from "./home.module.css";
 import { SingleRoom } from "@/components/room/singleRoom/SingleRoom";
+import toast from "react-hot-toast";
 
 export const Home = () => {
+
+  useEffect(() => {
+    // We've passed id to prevent duplicate toasts.
+      toast.success("Welcome😀 Yash!",{
+        id:'success'
+      });
+      toast.error("Error occured",{
+        id:'error'
+      });
+  },[])
   return (
     <div>
       <section id="rooms" className="container mt-5">
