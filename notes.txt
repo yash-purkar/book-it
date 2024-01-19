@@ -1,0 +1,19 @@
+By default all components in app directory are server components.
+In server components the component is rendered on the server side and the data which is fetched by api is also cached.
+Benifits -
+Data fetching happens on server side.
+Can keep sensitive data on server components like token, api keys.
+caching
+bundle sizes
+initial page load
+SEO
+streaming.
+
+Static Rendering(Next 13) Replaced with getStaticProps(Next 12)
+Dynamic Rendering(Next 13) Replaced with getServerSideProps(Next 12)
+
+By default all the server components are rendered staticly.
+Means it will compile the project and cached the data on the server and after that if we request data again it will give cached version rather than fetching data again.
+
+In Dynamic Rendering Routes are rendered for each user at a request time
+(Here we prevent caching)
