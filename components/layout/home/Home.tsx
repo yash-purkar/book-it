@@ -9,10 +9,7 @@ export const Home = () => {
   useEffect(() => {
     // We've passed id to prevent duplicate toasts.
       toast.success("Welcome😀 Yash!",{
-        id:'success'
-      });
-      toast.error("Error occured",{
-        id:'error'
+        id:'success',
       });
   },[])
   return (
