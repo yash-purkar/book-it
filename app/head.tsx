@@ -1,9 +1,5 @@
-import React from 'react'
+import React from "react";
 
 export const Head = () => {
-  return (
-    <>
-    <title>Book It</title>
-    </>
-  )
-}
+  return <></>;
+};

@@ -58,6 +58,7 @@ export const addNewRoom = catchAsyncError(async (request: NextRequest) => {
 // Get room details -> /api/rooms/:id
 export const getRoomDetails = catchAsyncError(
   async (request: NextRequest, { params }: { params: { id: string } }) => {
+    console.log(params,"d")
     const room = await Room.findById(params.id);
     if (!room) {
       throw new ErrorHandler("Room not found", 404);
