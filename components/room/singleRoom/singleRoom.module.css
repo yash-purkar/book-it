@@ -1,0 +1,52 @@
+.card {
+  height: 100%;
+  border: 0px;
+}
+
+.card-title a {
+  color: #2e2e2e;
+  text-decoration: none;
+  font-size: 1.2rem;
+}
+
+.card-title a:hover {
+  color: #e61e4d;
+  text-decoration: none;
+}
+
+.card-body {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.card-text {
+  font-size: 1.2rem;
+  color: black;
+}
+
+.card-body .view-btn {
+  background-color: #e61e4d;
+  color: white;
+  text-decoration: none;
+}
+
+.card-body .view-btn:hover {
+  background-color: #e61e4d;
+  color: white;
+}
+
+.card-img-top {
+  margin-bottom: 0.5rem;
+  border-radius: 0.8rem;
+}
+
+.ratings {
+  font-size: 1.2rem;
+  color: #e61e4d;
+}
+
+.no-of-reviews {
+  font-size: 0.85rem;
+  color: grey;
+  margin-left: 0.5rem;
+}

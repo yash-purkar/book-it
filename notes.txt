@@ -1,0 +1,66 @@
+By default all components in app directory are server components.
+In server components the component is rendered on the server side and the data which is fetched by api is also cached.
+Benifits -
+Data fetching happens on server side.
+Can keep sensitive data on server components like token, api keys.
+caching
+bundle sizes
+initial page load
+SEO
+streaming.
+
+Static Rendering(Next 13) Replaced with getStaticProps(Next 12)
+Dynamic Rendering(Next 13) Replaced with getServerSideProps(Next 12)
+
+By default all the server components are rendered staticly.
+Means it will compile the project and cached the data on the server and after that if we request data again it will give cached version rather than fetching data again.
+
+In Dynamic Rendering Routes are rendered for each user at a request time
+(Here we prevent caching)
+
+
+
+Caching - 
+
+const response = await fetch('http://localhost:3000/api/rooms');
+
+Next js extends native fetch method so we can configure the behaviour of caching and revalidating.
+We can fetch data in server components only.
+
+We've done console.log("Rooms per page => ", rooms.resultsPerPage); => output will be Rooms per page 4
+Now if we go to controller file in room controller and change the value of resultsPerPage it will not reflect here it will be still 4 because Next JS serving us the cached version of data.
+
+So we are not getting the data dynamically from the backend on each request.
+
+If data doesn't change frequently we can use caching.
+If data changes frequently we can override the caching behaviour.
+
+
+const response = await fetch('http://localhost:3000/api/rooms',{cache:'no-cache'});
+
+What is caching
+Caching stores data so it doesn't need to be refetched from backend on every request.
+So If next time user makes request the cached data will be return.
+
+By default behaviour is "force-cache"
+We can override this using "no-cache" or "no-store"
+
+
+Revalidation - Revalidation means we clear the cache and fetch the new data.
+We can do it in 2 different ways
+1. Time-based Revalidation - We specify the time. Eg. After each 10mins refetch the data.
+
+ const response = await fetch('http://localhost:3000/api/rooms',{next:{
+    revalidate:10
+  }});
+
+  now to see - add console in comp and change the value of resultsPerPage. 
+  And if we refresh the page immediately it will still show previous value.
+  And if we refresh after 10 seconds 1st time the previous vlaue will come but from 2nd time the new value will come.
+
+  if we pass revaliidate: 0
+  In this case it will not store any cache.
+
+
+2. On-demand Revalidation - When we want to refetch the data. We pass a collection name in it. w'll use if for update room. After updating the room we'll say refetch the data.
+
