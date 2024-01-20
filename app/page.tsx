@@ -3,7 +3,7 @@ import Error from "./error";
 
 const getRoomsData = async () => {
   try {
-    const response = await fetch(`${process.env.API_URL}/api/rooms`,{cache:'no-store'});
+    const response = await fetch(`${process.env.API_URL}/api/rooms`);
     return await response.json();
   } catch (error) {
     console.log(error);

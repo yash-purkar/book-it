@@ -8,7 +8,7 @@ import APIFilters from "../utils/apiFilters";
 export const getAllRooms = catchAsyncError(async (request: NextRequest) => {
   // For pagination, 8 results per page
   const resultsPerPage: number = 4;
-throw new ErrorHandler("Error",400)
+
   // To read the url params
   const { searchParams } = new URL(request.url);
 
@@ -27,7 +27,6 @@ throw new ErrorHandler("Error",400)
   // Creating instance of APIFilters class and passing Room model and queryStr
   const apiFilters = new APIFilters(Room, queryStr).search().filter();
   // We can call filter() after it bcz search() returning this.
-
 
   apiFilters.pagination(resultsPerPage);
   const rooms = await apiFilters.query;

@@ -23,7 +23,7 @@ interface IReviews {
   comment: string;
 }
 
-interface IRoom {
+export interface IRoom {
   name: string;
   description: string;
   pricePerNight: number;
