@@ -8,7 +8,7 @@ import APIFilters from "../utils/apiFilters";
 export const getAllRooms = catchAsyncError(async (request: NextRequest) => {
   // For pagination, 8 results per page
   const resultsPerPage: number = 4;
-
+throw new ErrorHandler("Error",400)
   // To read the url params
   const { searchParams } = new URL(request.url);
 

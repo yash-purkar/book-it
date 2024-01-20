@@ -36,7 +36,7 @@ export const catchAsyncError =
       }
       return NextResponse.json(
         {
-          error: error.message,
+          errorMessage: error.message,
         },
         { status: error.statusCode }
       );

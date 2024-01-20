@@ -4,7 +4,7 @@ import styles from "./home.module.css";
 import { SingleRoom } from "@/components/room/singleRoom/SingleRoom";
 import toast from "react-hot-toast";
 
-export const Home = () => {
+export const Home = ({data}:{data:any}) => {
 
   useEffect(() => {
     // We've passed id to prevent duplicate toasts.
