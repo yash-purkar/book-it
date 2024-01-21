@@ -28,7 +28,7 @@ export default function RootLayout({
         <GlobalProvider>
           <Header/>
           {children}
-        <Footer/> 
+        <Footer/>
           </GlobalProvider>
 
         <Script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></Script>

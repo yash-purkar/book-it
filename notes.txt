@@ -119,3 +119,13 @@ page=2
 and at the end url will be 
 ${process.env.API_URL}/api/rooms?page=2 -> And logic for this we've handled in backend
 
+
+// FILTERS
+
+1. Location 
+// We have input field for the location we'll get the value from that field and push that to the url.
+// In handleSubmit
+We push the user to 
+router.push(`/?location=${location}`) so It'll call the api and it will show the data accordingly. We've logic in backend for the same.
+
+
