@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import Room from "@/backend/models/room";
+import Room, { IRoom } from "@/backend/models/room";
 import ErrorHandler from "../utils/errorHandler";
 import { catchAsyncError } from "../middlewares/catchAsyncError";
 import APIFilters from "../utils/apiFilters";
@@ -28,11 +28,15 @@ export const getAllRooms = catchAsyncError(async (request: NextRequest) => {
   const apiFilters = new APIFilters(Room, queryStr).search().filter();
   // We can call filter() after it bcz search() returning this.
 
-  apiFilters.pagination(resultsPerPage);
-  const rooms = await apiFilters.query;
+  let rooms: IRoom[] = await apiFilters.query;
 
-  // Will need this on frontend.
+// Will need this on frontend.
   const filteredRoomsCount: number = rooms.length;
+
+  apiFilters.pagination(resultsPerPage);
+  rooms = await apiFilters.query.clone();
+
+  // we have to use .clone() otherwise will get the error - Query was already executed: Room.find({})
 
   return NextResponse.json({
     Success: true,
@@ -58,7 +62,7 @@ export const addNewRoom = catchAsyncError(async (request: NextRequest) => {
 // Get room details -> /api/rooms/:id
 export const getRoomDetails = catchAsyncError(
   async (request: NextRequest, { params }: { params: { id: string } }) => {
-    console.log(params,"d")
+    console.log(params, "d");
     const room = await Room.findById(params.id);
     if (!room) {
       throw new ErrorHandler("Room not found", 404);

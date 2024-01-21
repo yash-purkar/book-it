@@ -64,3 +64,58 @@ We can do it in 2 different ways
 
 2. On-demand Revalidation - When we want to refetch the data. We pass a collection name in it. w'll use if for update room. After updating the room we'll say refetch the data.
 
+
+
+// PAGINATION
+
+1. we installed package for pagination.
+2. Got the page number from url search params and default it'll be 1.
+const searchParams = useSearchParams();
+const page = Number(searchParams.get("page")) || 1;
+// useSearchParams() -> gives us the url params.
+e.g https://google.com?page=3
+In this case it will give us {page : 3}
+We have pass active page to the <Pagination /> component bcz it need that for active styling.
+
+3. We called this comp in Home Comp and pass the resPerPage and filteredRoomsCount.
+// We need to pass this to <Pagination />
+
+3. handleChange function which will be called after changing the page by clicking on the page number; And will have the access to the number which user has clicked.
+
+In this function we want if we click on the page number we want to add that in the query. So we'll use this to fetch the data from backend accordingly.
+
+So 1st we checked window should not be undefined Means page is loaded properly
+
+We can't use the searchParams.set() to set the params we have to use class URLSeaerchParams
+We have passed window.location.search to it so  -  it will create a new URLSearchParams object that represents the key-value pairs in the query string.
+
+//Now we want to check if there is a "page" in query then update it with this new page value.
+If not set then add it in query
+e.g http://localhost:300?page=2 - > already there and user clicks 4 it will be http://localhost:300?page=4
+e.g http://localhost:3000 -> not there and user clicks on 2 http://localhost:300?page=2
+
+If the URLSearchParams object is showing { size: 2 } and you've confirmed that your URL is correctly formatted, then it indicates that the forEach loop should work correctly. The { size: 2 } output itself is expected when you log the URLSearchParams object directly, as it doesn't show the individual key-value pairs in the console.
+If you want to see you can use forEach method of URLSeaerchParams class.
+
+ we have added the query now we want to push the user to that url.
+
+ const path = `window.location.pathname?${queryParams.toString()}`  - It will convert that to string to show in query.
+ and just
+ router.push(path);
+
+ Now we want to get the value from query and pass that to backend.
+so we are pushing the user to home page bcz the url will be same only params will be change.
+In HomePage will get the {searchParams} which will be string and will pass this to the getRoomsData function.
+
+In thw getRoomsData we've again used URLSeaerchParams bcz are getting Object of queryParams - 
+{ page: '2' }
+
+and we've passed this so URLSeaerchParams will convert it to query string.
+ { 'page' => '2' } 
+
+and that queryString we will convert to actual string so 
+page=2
+
+and at the end url will be 
+${process.env.API_URL}/api/rooms?page=2 -> And logic for this we've handled in backend
+

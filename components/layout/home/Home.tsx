@@ -4,6 +4,7 @@ import styles from "./home.module.css";
 import { SingleRoom } from "@/components/room/singleRoom/SingleRoom";
 import toast from "react-hot-toast";
 import { IRoom } from "@/backend/models/room";
+import { CustomPagination } from "../customPagination/CustomPagination";
 
 interface HomeProps {
   data : {
@@ -39,6 +40,7 @@ export const Home = ({data}:HomeProps) => {
           </div>
         </div>
       </section>
+      <CustomPagination resultsPerPage={data.resultsPerPage} filteredRoomsCount={data.filteredRoomsCount}/>
     </div>
   );
 };

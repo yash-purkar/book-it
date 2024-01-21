@@ -40,16 +40,16 @@ class APIFilters {
     return this;
   }
 
-  pagination(resultPerPage: number): APIFilters {
+  pagination(resultsPerPage: number): APIFilters {
     const currentPage = this.queryStr?.page || 1;
 
-    const skipCount = resultPerPage * (currentPage - 1);
+    const skipCount = resultsPerPage * (currentPage - 1);
     /*
     If current page is 2 and resultPerPage is 5 Now I wanna skip first 5 so I will show from 6 to 10. 
     skipCount = 5 * (2 - 1); so it will be 5 so 5 will be skip.
     */
 
-    this.query = this.query.limit(resultPerPage).skip(skipCount);
+    this.query = this.query.limit(resultsPerPage).skip(skipCount);
     return this;
   }
 }

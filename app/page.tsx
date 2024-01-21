@@ -5,17 +5,24 @@ export const metadata = {
   title: "Home - BookIT"
 }
 
-const getRoomsData = async () => {
+const getRoomsData = async (searchParams:string) => {
+  
+  const urlParams = new URLSearchParams(searchParams);
+  console.log(urlParams)
+  const queryString = urlParams.toString();
+
   try {
-    const response = await fetch(`${process.env.API_URL}/api/rooms`,{cache:'no-cache'});
+    const response = await fetch(`${process.env.API_URL}/api/rooms?${queryString}`,{cache:'no-cache'});
     return await response.json();
   } catch (error) {
     console.log(error);
   }
 };
-
-export default async function HomePage() {
-  const data = await getRoomsData();
+interface HomePageProps {
+  searchParams :string
+}
+export default async function HomePage({searchParams}:HomePageProps) {
+  const data = await getRoomsData(searchParams);
 
   if(data.errorMessage) {
     return <Error error={{...data,message:data.errorMessage}}/>
