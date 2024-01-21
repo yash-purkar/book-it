@@ -19,7 +19,7 @@ const RoomDetailsPage = async ({params} : RoomDetailsProps) => {
     if(data?.errorMessage) {
        return <Error error={data}/>
     }
-  return <RoomDetails room={data} />;
+  return <RoomDetails data={data} />;
 };
 
 export default RoomDetailsPage;

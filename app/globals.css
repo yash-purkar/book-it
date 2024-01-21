@@ -27,3 +27,22 @@ body {
   background-clip: padding-box;
   border-radius: 5px;
 }
+
+.page-item.active .page-link {
+  background-color: #e61e4d;
+  border-color: #e61e4d;
+  color: #fff;
+}
+
+.page-item.active .page-link:hover {
+  color: #fff;
+  cursor: pointer;
+}
+
+.pagination .page-link {
+  color: #e61e4d;
+}
+
+.pagination .page-link:hover {
+  color: #e61e4d;
+}
