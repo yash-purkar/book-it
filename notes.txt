@@ -128,4 +128,9 @@ ${process.env.API_URL}/api/rooms?page=2 -> And logic for this we've handled in b
 We push the user to 
 router.push(`/?location=${location}`) so It'll call the api and it will show the data accordingly. We've logic in backend for the same.
 
+Then We updated the code to -  
+ // It'll filter out the locations which has no value
+        const queryString = [location && `location=${location}`,numOfGuests && `guestCapacity=${numOfGuests}`,roomType && `category=${roomType}`].filter(Boolean).join("&");
 
+So it'll add the queryParams based on the condition.
+.filter(Boolean) It will remove all false values.
