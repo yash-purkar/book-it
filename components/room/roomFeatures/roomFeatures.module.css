@@ -1,0 +1,9 @@
+.room-feature {
+    font-size: 1.1rem;
+    color: #404040;
+  }
+  
+  .room-feature p {
+    margin-left: 0.4rem;
+    display: inline-block;
+  }
