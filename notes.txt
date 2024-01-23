@@ -134,3 +134,8 @@ Then We updated the code to -
 
 So it'll add the queryParams based on the condition.
 .filter(Boolean) It will remove all false values.
+
+
+// REGISTER THE USER - 
+
+1ST we created controller for it and we called that controller in the register api route.

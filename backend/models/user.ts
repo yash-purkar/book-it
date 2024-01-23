@@ -22,7 +22,7 @@ const userSchema: Schema<IUser> = new Schema({
   email: {
     type: String,
     required: [true, "Please enter your email."],
-    uniqu:true
+    unique:true
   },
   password:{
     type:String,
