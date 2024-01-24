@@ -134,3 +134,56 @@ Then We updated the code to -
 
 So it'll add the queryParams based on the condition.
 .filter(Boolean) It will remove all false values.
+
+
+// REGISTER THE USER - 
+
+1ST we created controller for it and we called that controller in the register api route.
+
+// NEXT AUTH
+
+first we defined auth fn in that we took next request and next response
+
+in that fn we returned NextAuth and in NextAuth we give
+session: and strategy which we will be using for authentication which will be "jwt"
+
+Now there are providers array in this we define what type of providers we will be using 
+e.g Github 
+google
+instagram etc 
+and we are using CredentialsProvider
+
+in CredentialsProvider we have authorize function in this we get the access to credentials.
+so we destructed the email and password of the user to check in db is that user is present or not.
+
+After this we returned the user;
+
+Callbacks.
+
+Now we have some callbacks in nextAuth 
+Callbacks are asynchfonous functions we can use to control what happens when action is performed.
+
+// We've to add the user in the session. so will use some callbacks e.g jwt and session
+
+jwt: async({token,user}) => {
+            if(user) {
+                token.user = user;
+            }
+
+            // TODO : Update session when user is updated.
+            return token;
+        },
+this callback is called when JWT is created or updated.
+in this fn we get the access to token and the user which we are returning from authorize();
+
+Now we want to store the user in session so we'll write the session callback in that we'll get the session and the token which we are returning from the jwt.
+
+session: async({session,token}) => {
+            session.user = token.user as IUser;
+
+            return session;
+        }
+
+        We have stored the user in token already in jwt callback so we are saving the user in session.user as well.
+
+// And at the end we added secret key 
