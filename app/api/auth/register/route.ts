@@ -12,6 +12,5 @@ connectToDB();
 router.post(registerUser);
 
 export const POST = async (request: NextRequest, ctx: RequestContext) => {
-    console.log("hii")
   return router.run(request, ctx);
 };

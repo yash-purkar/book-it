@@ -1,5 +1,5 @@
 import mongoose, { Schema } from "mongoose";
-
+import bcrypt from 'bcrypt';
 interface IUser {
   name: string;
   email: string;
@@ -22,28 +22,40 @@ const userSchema: Schema<IUser> = new Schema({
   email: {
     type: String,
     required: [true, "Please enter your email."],
-    unique:true
+    unique: true,
   },
-  password:{
-    type:String,
-    required:true,
-    minlength:[6,"Password must be longer than 6 characters."],
-    select:false, // If we fetch the user data the password field won't come in response.
+  password: {
+    type: String,
+    required: true,
+    minlength: [6, "Password must be longer than 6 characters."],
+    select: false, // If we fetch the user data the password field won't come in response.
   },
-  avatar:{
-    public_id:String,
-    url:String
+  avatar: {
+    public_id: String,
+    url: String,
   },
-  role:{
-    type:String,
-    default:"user"
+  role: {
+    type: String,
+    default: "user",
   },
-  createdAt:{
-    type:Date,
-    default:Date.now,
+  createdAt: {
+    type: Date,
+    default: Date.now,
   },
-  resetPasswordToken:String,
-  resetPasswordExpire:Date
+  resetPasswordToken: String,
+  resetPasswordExpire: Date,
 });
 
-export default mongoose.models.User || mongoose.model<IUser>("User",userSchema);
+// Encrypt the password before saving the user.
+userSchema.pre("save", async function(next) {
+  // This refers to the new user
+  if (!this.isModified('password')) {
+    // Means we have not made any changes in password field.
+    next();
+  }
+  this.password = await bcrypt.hash(this.password,10);
+  // Salt means how much stronger password we need.
+});
+
+export default mongoose.models.User ||
+  mongoose.model<IUser>("User", userSchema);
