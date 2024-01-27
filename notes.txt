@@ -188,3 +188,13 @@ session: async({session,token}) => {
         We have stored the user in token already in jwt callback so we are saving the user in session.user as well.
 
 // And at the end we added secret key 
+
+
+// Showing username in header
+
+So we'll get user session and in that we'll have user details and we'll show it in header.
+
+1st we need to wrap our application in SessionProvider so we did that in Global provider
+
+then in header we'll use useSession hook to get the session. 
+And when we wrap our app in session provider it'll also call the session callback in [...nextauth]/route.ts

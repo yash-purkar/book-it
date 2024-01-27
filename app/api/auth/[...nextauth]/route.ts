@@ -60,9 +60,9 @@ const authOptions: AuthOptions = {
       return token;
     },
     session: async ({ session, token }) => {
-      console.log({ session, token });
       session.user = token.user as IUser;
-
+      // @ts-ignore
+      delete session?.user?.password;
       return session;
     },
   },
