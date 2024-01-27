@@ -1,5 +1,5 @@
 import mongoose, { Schema } from "mongoose";
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 export interface IUser {
   name: string;
   email: string;
