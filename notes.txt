@@ -198,3 +198,11 @@ So we'll get user session and in that we'll have user details and we'll show it 
 
 then in header we'll use useSession hook to get the session. 
 And when we wrap our app in session provider it'll also call the session callback in [...nextauth]/route.ts
+
+// Logout 
+for logout nextauth provoides us signOut() functoijn we can call that to signout.
+
+//Skeleton on loading
+
+If we refresh the page the data which is coming from session will be undefined, and once session is loaded the data will have the user value.
+so we want to show the skeleton if data is undefined.

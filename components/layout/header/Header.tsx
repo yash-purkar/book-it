@@ -1,12 +1,16 @@
 "use client";
 import React from "react";
 import styles from "./header.module.css";
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 
 export const Header = () => {
   const { data } = useSession();
-  console.log({ data });
+
+  const handleLogout = () => {
+    signOut();
+  };
+
   return (
     <nav className={`${styles.nav} navbar sticky-top py-2`}>
       <div className="container">
@@ -50,29 +54,41 @@ export const Header = () => {
                 className="dropdown-menu w-100"
                 aria-labelledby="dropdownMenuButton1"
               >
-                <a href="/admin/dashboard" className="dropdown-item">
+                <Link href="/admin/dashboard" className="dropdown-item">
                   Dashboard
-                </a>
-                <a href="/bookings/me" className="dropdown-item">
+                </Link>
+                <Link href="/bookings/me" className="dropdown-item">
                   My Bookings
-                </a>
-                <a href="/me/update" className="dropdown-item">
+                </Link>
+                <Link href="/me/update" className="dropdown-item">
                   Profile
-                </a>
-                <a href="/" className="dropdown-item text-danger">
+                </Link>
+                <Link
+                  href="/"
+                  onClick={handleLogout}
+                  className="dropdown-item text-danger"
+                >
                   Logout
-                </a>
+                </Link>
               </div>
             </div>
           ) : (
-            data === null && (
-              <Link
-                href="/login"
-                className="btn btn-danger px-4 text-white login-header-btn float-right"
-              >
-                Login
-              </Link>
-            )
+            <>
+              {data === undefined && (
+                <div className="placeholder-glow">
+                  <figure className="avatar header_avatar__4PIro placeholder bg-secondary"></figure>
+                  <span className="placeholder w-25 bg-secondary ms-2"></span>
+                </div>
+              )}
+              {data === null && (
+                <Link
+                  href="/login"
+                  className="btn btn-danger px-4 text-white login-header-btn float-right"
+                >
+                  Login
+                </Link>
+              )}
+            </>
           )}
         </div>
       </div>
