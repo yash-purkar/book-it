@@ -142,9 +142,10 @@ So it'll add the queryParams based on the condition.
 
 // NEXT AUTH
 
-first we defined auth fn in that we took next request and next response
+We called SignIn fn in Login component and that wll come to this file [...nextauth]/route.ts
+And it'll see the provider name in this case 'credentials' and will handle it accordingly.
 
-in that fn we returned NextAuth and in NextAuth we give
+
 session: and strategy which we will be using for authentication which will be "jwt"
 
 Now there are providers array in this we define what type of providers we will be using 
@@ -187,3 +188,21 @@ session: async({session,token}) => {
         We have stored the user in token already in jwt callback so we are saving the user in session.user as well.
 
 // And at the end we added secret key 
+
+
+// Showing username in header
+
+So we'll get user session and in that we'll have user details and we'll show it in header.
+
+1st we need to wrap our application in SessionProvider so we did that in Global provider
+
+then in header we'll use useSession hook to get the session. 
+And when we wrap our app in session provider it'll also call the session callback in [...nextauth]/route.ts
+
+// Logout 
+for logout nextauth provoides us signOut() functoijn we can call that to signout.
+
+//Skeleton on loading
+
+If we refresh the page the data which is coming from session will be undefined, and once session is loaded the data will have the user value.
+so we want to show the skeleton if data is undefined.
