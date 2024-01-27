@@ -5,7 +5,6 @@ import React, { useState } from "react";
 import styles from "./login.module.css";
 import toast from "react-hot-toast";
 import { signIn } from "next-auth/react";
-// import { signIn } from "@/app/api/auth/[...nextauth]/route";
 
 export const Login = () => {
   const [email, setEmail] = useState("");
@@ -15,7 +14,7 @@ export const Login = () => {
     e.preventDefault();
 
     const result = await signIn("credentials", {
-      // redirect: false,
+      redirect: false,
       email,
       password,
     });
