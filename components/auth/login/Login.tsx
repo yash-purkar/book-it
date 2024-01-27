@@ -5,11 +5,12 @@ import React, { useState } from "react";
 import styles from "./login.module.css";
 import toast from "react-hot-toast";
 import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 export const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
+  const router = useRouter();
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -18,9 +19,12 @@ export const Login = () => {
       email,
       password,
     });
-if(result?.error) {
-  console.log(result)
-}
+    if (result?.error) {
+      toast.error(result.error);
+    } else {
+      router.replace("/");
+      toast.success('Login Successfully')
+    }
   };
 
   return (

@@ -142,9 +142,10 @@ So it'll add the queryParams based on the condition.
 
 // NEXT AUTH
 
-first we defined auth fn in that we took next request and next response
+We called SignIn fn in Login component and that wll come to this file [...nextauth]/route.ts
+And it'll see the provider name in this case 'credentials' and will handle it accordingly.
 
-in that fn we returned NextAuth and in NextAuth we give
+
 session: and strategy which we will be using for authentication which will be "jwt"
 
 Now there are providers array in this we define what type of providers we will be using 

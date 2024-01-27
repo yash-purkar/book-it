@@ -1,67 +1,80 @@
 import connectToDB from "@/backend/config/db.Connect";
 import User, { IUser } from "@/backend/models/user";
-import { NextApiRequest, NextApiResponse } from "next";
 import NextAuth from "next-auth/next";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
+import { AuthOptions } from "next-auth";
 
 interface Creds {
   email: string;
   password: string;
 }
 
-const auth = async (request: NextApiRequest, response: NextApiResponse) => {
-  return await NextAuth({
-    session: {
-      strategy: "jwt",
-    },
-    providers: [
-      CredentialsProvider({
-        // @ts-ignore
-        async authorize(credentials: Creds) {
-          connectToDB();
+const login = async (creds: Creds) => {
+  const { email, password } = creds;
+  try {
+    connectToDB();
+    const user = await User.findOne({ email }).select("+password");
 
-          const { email, password } = credentials;
+    if (!user) {
+      throw new Error("Wrong Creds!");
+    }
 
-          const user = await User.findOne({ email });
+    const isPasswordMatched = await bcrypt.compare(password, user.password);
 
-          if (!user) {
-            throw new Error("Invalid Email or Password!");
-          }
-
-          const isPasswordMatched = await bcrypt.compare(
-            password,
-            user.password
-          );
-
-          if (!isPasswordMatched) {
-            throw new Error("Invalid Email or Password!");
-          }
-
-          return user;
-        },
-      }),
-    ],
-    callbacks: {
-      jwt: async ({ token, user }) => {
-        if (user) {
-          token.user = user;
-        }
-
-        // TODO : Update session when user is updated.
-        return token;
-      },
-      session: async ({ session, token }) => {
-        session.user = token.user as IUser;
-
-        return session;
-      },
-    },
-    secret: process.env.NEXTAUTH_SECRET,
-  });
+    if (!isPasswordMatched) {
+      throw new Error("Wrong Creds!");
+    }
+    return user;
+  } catch (error:any) {
+    throw new Error(error.message);
+  }
 };
 
-export { auth as GET, auth as POST };
+const authOptions: AuthOptions = {
+  providers: [
+    CredentialsProvider({
+      name: "credentials",
+      credentials: {},
+      // @ts-ignore
+      async authorize(credentials: Creds, req: NextApiRequest) {
+        const user = await login(credentials);
+        return user;
+      },
+    }),
+  ],
+  session: {
+    strategy: "jwt",
+  },
+  secret: process.env.NEXTAUTH_SECRET,
+  pages: {
+    signIn: "/login",
+  },
+  callbacks: {
+    jwt: async ({ token, user }) => {
+      if (user) {
+        token.user = user;
+      }
+
+      // TODO : Update session when user is updated.
+      return token;
+    },
+    session: async ({ session, token }) => {
+      console.log({ session, token });
+      session.user = token.user as IUser;
+
+      return session;
+    },
+  },
+};
+
+const handler = NextAuth(authOptions);
+
+export { handler as GET, handler as POST };
+
+// This signIn property specifies the URL where NextAuth should redirect users when they need to sign in.
+// In this example, it's set to '/login', indicating that users should be redirected to the /login page for sign-in.
+
 // We need to export this function with HTTP method name.
 // We need to export this function with HTTP method name.
 // So nextjs automatically sends those request. So we don't need to send any request to next auth.
