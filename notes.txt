@@ -212,3 +212,17 @@ so we want to show the skeleton if data is undefined.
 Wrap the application using Provider.
 create custom hooks for useDispatch and useSelector. 
 // * @use - Using these custom hooks avoids repeating type definitions for useDispatch and useSelector in multiple places.
+
+
+//Slices
+//Slice - Slice is a collection of your reducer logic and actions.
+
+//We created userSlice 
+and in this we defined initial state for the user slice and also reducers
+setUser and setIsAuthenticated
+We'll dispatch this and it'll updated our state.
+
+We've exorted reducer bcz we want to use that in store and in store we have given the name to it 'auth'.
+And whenever we need user data we'll call useSelector() and take state.auth so it'll give the user data.
+And also exported dispatch to dispatch the actions.
+And we've set the user in header.tsx

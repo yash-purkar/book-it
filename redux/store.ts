@@ -1,8 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
+import { userReducer } from "./slices";
 
 // Creating a store.
 export const store = configureStore({
-  reducer: {},
+  reducer: {
+    auth: userReducer,
+  },
 });
 
 // Types for useSelector and useDispatch

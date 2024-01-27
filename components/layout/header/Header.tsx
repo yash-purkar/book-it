@@ -1,11 +1,22 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import styles from "./header.module.css";
 import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { setIsAuthenticated, setUser } from "@/redux/slices/userSlice";
 
 export const Header = () => {
+  const dispatch = useAppDispatch();
+  const { user } = useAppSelector((state) => state.auth);
   const { data } = useSession();
+
+useEffect(()=>{
+  if(data?.user){
+    dispatch(setUser(data.user));
+    dispatch(setIsAuthenticated(true));
+  }
+},[data]);
 
   const handleLogout = () => {
     signOut();
@@ -27,7 +38,7 @@ export const Header = () => {
         </div>
 
         <div className="fCol-6 col-lg-3 mt-3 mt-md-0 text-end">
-          {data?.user ? (
+          {user ? (
             <div className="ml-4 dropdown d-line">
               <button
                 className="btn dropdown-toggle"
@@ -46,7 +57,7 @@ export const Header = () => {
                   />
                 </figure>
                 <span className="placeholder-glow ps-1">
-                  {data?.user?.name}
+                  {user?.name}
                 </span>
               </button>
 
