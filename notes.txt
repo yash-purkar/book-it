@@ -206,3 +206,9 @@ for logout nextauth provoides us signOut() functoijn we can call that to signout
 
 If we refresh the page the data which is coming from session will be undefined, and once session is loaded the data will have the user value.
 so we want to show the skeleton if data is undefined.
+
+//Redux toolkit query
+1st Create a store using configureStore();
+Wrap the application using Provider.
+create custom hooks for useDispatch and useSelector. 
+// * @use - Using these custom hooks avoids repeating type definitions for useDispatch and useSelector in multiple places.
