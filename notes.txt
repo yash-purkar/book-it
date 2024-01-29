@@ -322,3 +322,18 @@ And we handled the redirection there.
 we'll create controller fot it and get the email and password from the req body and will use findOneByIdAndUpdate()
 
 And we'll create a route for this and will use put method there bcz (mostly we use this for update)
+
+
+// PROTECT ROUTES WITH UNAUTHENTICATED USERS
+
+we'll create new middleware for this isAuthenticated and in this
+1st we'll get the session first to get this next-auth provide 
+getToken() - We'll get user in it bcz we've already set it in callbacks of next-auth;
+And then we'll check is session there if yes then there is a user in session add that to the request otherwise send the message with 401 status code.
+
+if it is there we'll add that user in request but it'll throw an error property user doesn't exist on NextRequest.
+
+so we'll have to add tha in next.d.ts
+
+And after this in route.ts of update we'll have to use this middleware so we'll use like this:
+router.use(isAuthenticated).put(updateDetails)

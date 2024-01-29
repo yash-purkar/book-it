@@ -25,20 +25,20 @@ export const registerUser = catchAsyncError(async (request: NextRequest) => {
   });
 });
 
-
 // Update usder details /api/me/update
-export const updateDetails = catchAsyncError(async (request:NextRequest) => {
+export const updateDetails = catchAsyncError(async (request: NextRequest) => {
   const body = await request.json();
 
   const userData = {
-    email:body.email,
-    password:body.password
-  }
+    email: body.email,
+    password: body.password,
+  };
 
-  const user = await User.findByIdAndUpdate(request.user._id,userData)
+  // @ts-ignore
+  const user = await User.findByIdAndUpdate(request.user._id, userData);
 
   return NextResponse.json({
-    Success:true,
-    user
+    Success: true,
+    user,
   });
-})
+});
