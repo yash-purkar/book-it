@@ -316,3 +316,9 @@ register(userData)
 And we handled the redirection there.
 */
 
+
+// Update User controller and route
+
+we'll create controller fot it and get the email and password from the req body and will use findOneByIdAndUpdate()
+
+And we'll create a route for this and will use put method there bcz (mostly we use this for update)
