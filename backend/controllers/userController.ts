@@ -3,6 +3,7 @@ import { catchAsyncError } from "../middlewares/catchAsyncError";
 import User from "../models/user";
 import ErrorHandler from "../utils/errorHandler";
 
+// Add new User /api/auth/register
 export const registerUser = catchAsyncError(async (request: NextRequest) => {
   const body = await request.json();
   const { name, email, password } = body;
@@ -21,5 +22,23 @@ export const registerUser = catchAsyncError(async (request: NextRequest) => {
   await newUser.save();
   return NextResponse.json({
     success: true,
+  });
+});
+
+// Update usder details /api/me/update
+export const updateDetails = catchAsyncError(async (request: NextRequest) => {
+  const body = await request.json();
+
+  const userData = {
+    email: body.email,
+    password: body.password,
+  };
+
+  // @ts-ignore
+  const user = await User.findByIdAndUpdate(request.user._id, userData);
+
+  return NextResponse.json({
+    Success: true,
+    user,
   });
 });
