@@ -25,13 +25,15 @@ export const registerUser = catchAsyncError(async (request: NextRequest) => {
   });
 });
 
-// Update usder details /api/me/update
-export const updateDetails = catchAsyncError(async (request: NextRequest) => {
+
+// Update user details /api/me/update
+// It will update user name and email
+export const updateProfile = catchAsyncError(async (request: NextRequest) => {
   const body = await request.json();
 
   const userData = {
+    name: body.name,
     email: body.email,
-    password: body.password,
   };
 
   // @ts-ignore
