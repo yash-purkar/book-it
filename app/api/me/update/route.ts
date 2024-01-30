@@ -10,8 +10,8 @@ const router = createEdgeRouter<NextRequest, RequestContext>();
 
 connectToDB();
 
-router.use(isAuthenticated).put(updateProfile)
+router.use(isAuthenticated).put(updateProfile);
 
-export const PUT = (request: NextRequest, ctx: RequestContext) => {
+export const PUT = async (request: NextRequest, ctx: RequestContext) => {
   return router.run(request, ctx);
 };

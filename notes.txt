@@ -337,3 +337,18 @@ so we'll have to add tha in next.d.ts
 
 And after this in route.ts of update we'll have to use this middleware so we'll use like this:
 router.use(isAuthenticated).put(updateDetails)
+
+
+// UPDATE PROFILE UI
+We stored the values in state.
+We need current login user name and email to show in that fields so we'll get that from useAppSelector()
+bcz we've saved that details in Header.tsx file.
+Then
+We'll write RTK query to updte the data (The benefits are mentioned above)
+And we'll export that fn and we'll call that in UpdateProfile and get that updateProfile fn and will pass the userData to that fn and that fn will make api call to given url in that fn with the data which is body.
+And we need to add that in store as well;
+
+and In Redux Toolkit Query (RTK Query), the API slices created using the createApi function provide a way to manage API-related logic, including fetching data, caching, and handling mutations. To make use of these features, you need to integrate the generated API slices into your Redux store.
+
+//There is a one problem now if we update the details then we are not able to see them immediately even though we refresh the page, we've to logout and login again to see them, 
+But we don't want that so we've to update the session.
