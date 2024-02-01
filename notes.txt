@@ -352,3 +352,21 @@ and In Redux Toolkit Query (RTK Query), the API slices created using the createA
 
 //There is a one problem now if we update the details then we are not able to see them immediately even though we refresh the page, we've to logout and login again to see them, 
 But we don't want that so we've to update the session.
+
+
+//UPDATE SESSION
+
+1st in [...nextauth] we need to update session in jwt
+there wi'll add a check if(request.url.includes("/api/auth/session?update))
+then we'll find the updated user in db and set it in the token and then that token's user will be assign to session user.
+(we already have user's id in jwt so we'll fetch the data from db. bcz when we've used findOneByIdAndUpdate() it won't return new data it updates in db but doesn't return that.)
+Now
+We need to write RTK query in usrApi for updateSession() function and that will hit that api "/api/auth/session?update" with update flag.
+RTK Query
+// We've used lazy there not used useUpdateSessionQuery, If we use lazy and we call that fn useLazyUpdateSessionQuery it will not invoke immediately. If we don't use lazy it will call that fn immediately but don't want that we want to call that fn after updating the user. 
+
+And we'll use that in updateProfile component
+  const [updateSession,{data}] = useLazyUpdateSessionQuery();
+
+and in condition of isSuccess in useEffect we'll call this updateSession fn so it'll call that api accordingly and in [...nextauth] it will update the session and in UpdateProfile we've got that user from store and using that. 
+and that data will be changed and it'll call the dispatch to update the user in store.
