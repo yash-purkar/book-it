@@ -10,7 +10,9 @@ const nextConfig = {
     NEXTAUTH_SECRET: "Heyy, I wanna join flipkart without dsa",
   },
   images: {
-    domains: ["res.cloudinary.com"],
+    remotePatterns: [{
+      hostname:"res.cloudinary.com",
+    }],
   },
 };
 module.exports = nextConfig;

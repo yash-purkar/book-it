@@ -1,42 +1,53 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import styles from "./updateProfile.module.css";
-import { useAppSelector } from "@/redux/hooks";
-import { useUpdateProfileMutation } from "@/redux/api/userApi";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import {
+  useLazyUpdateSessionQuery,
+  useUpdateProfileMutation,
+} from "@/redux/api/userApi";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import { setUser } from "@/redux/slices/userSlice";
 
 export const UpdateProfile = () => {
   const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
 
   const { user: currentUser } = useAppSelector((state) => state.auth);
-
-  const [updateProfile, { isSuccess, isLoading, isError,error }] =
+  const dispatch = useAppDispatch();
+  const [updateProfile, { isSuccess, isLoading, isError, error }] =
     useUpdateProfileMutation();
-console.log({isLoading,error,isSuccess})
+
+  const [updateSession, { data }] = useLazyUpdateSessionQuery();
+
+  if (data) {
+    dispatch(setUser(data.user));
+  }
+
   const router = useRouter();
   useEffect(() => {
     if (currentUser) {
       setName(currentUser.name);
       setEmail(currentUser.email);
     }
-    if (isError&&error && "data" in error) {
+    if (isError && error && "data" in error) {
       toast.error(
         // @ts-ignore
         error.data?.errorMessage ?? (
           <span>
-            Something went wrong! {name && <strong>{currentUser.name}🙁</strong>} Plese try
-            again later
+            Something went wrong!{" "}
+            {name && <strong>{currentUser.name}🙁</strong>} Plese try again
+            later
           </span>
         )
       );
     }
-
     if (isSuccess) {
+      // @ts-ignore
+      updateSession();
       // It will make a new request to the server and get new data
       router.refresh();
-    toast.success("working")
     }
   }, [currentUser, error, isSuccess]);
 
