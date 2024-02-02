@@ -395,3 +395,11 @@ We've created nested layout.tsx In /me so Whatever call we do like
 /me/forgot-password
 
 That will pass to the layout as a children (Not sure) and we are Rendering that.
+
+// UPDATE PASSWORD API ROUTE
+// 1st we created controller and we got user written password.
+// Then in UserModel we'll add our own method in userSchema, and we can use that later whenever we want.
+// In that we'll compare the password and return boolean based on the result.
+// And in updatePassword controller we'll use this.
+// And will check there if it is not matched then throw new error.
+// Otherwise update it in db using save(), so whenever we'll use save() on user the fn which we've in Usermodel userSchema.pre will execute and it will encrypt that password before saving it in db.
