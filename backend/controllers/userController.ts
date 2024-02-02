@@ -25,7 +25,6 @@ export const registerUser = catchAsyncError(async (request: NextRequest) => {
   });
 });
 
-
 // Update user details /api/me/update
 // It will update user name and email
 export const updateProfile = catchAsyncError(async (request: NextRequest) => {
@@ -43,4 +42,23 @@ export const updateProfile = catchAsyncError(async (request: NextRequest) => {
     Success: true,
     user,
   });
+});
+
+// Update user password /api/me/update_password
+export const updatePassword = catchAsyncError(async (request: NextRequest) => {
+  const body = await request.json();
+
+  // @ts-ignore
+  const user = await User.findById("65b4df8c403c8a03ccb1c3dd").select("+password");
+
+  const isPasswordMatched = await user.comparePasswordCustomMethod(body.oldPassword);
+
+  if(!isPasswordMatched){
+    throw new ErrorHandler("Old password is incorrect!",400);
+  }
+
+  user.password = body.password;
+  await user.save();
+
+  return NextResponse.json({ success: true });
 });

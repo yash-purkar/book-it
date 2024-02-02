@@ -370,3 +370,36 @@ And we'll use that in updateProfile component
 
 and in condition of isSuccess in useEffect we'll call this updateSession fn so it'll call that api accordingly and in [...nextauth] it will update the session and in UpdateProfile we've got that user from store and using that. 
 and that data will be changed and it'll call the dispatch to update the user in store.
+
+
+// PROTECT FONTEND ROUTES
+
+We created middleware.ts and in this we define config and in config we pass matcher and in that we passed the path of page which we want to protect.
+And we used withAuth middleware by next-auth/middleware
+
+And then if we try to go on /me/update without login it'll redirect us to sign in page and that is provided by next-auth but we want user should be redirect to our custom login page.
+so in [...nextauth]/route.ts
+in config we'll pass 
+pages: {
+      signIn: "/login",
+    },
+    so it'll redirect to /login rather than default page.
+
+
+
+// NESTED LAYOUT FOR USER PROFILE
+
+We've created nested layout.tsx In /me so Whatever call we do like 
+/me/update
+/me/update-password
+/me/forgot-password
+
+That will pass to the layout as a children (Not sure) and we are Rendering that.
+
+// UPDATE PASSWORD API ROUTE
+// 1st we created controller and we got user written password.
+// Then in UserModel we'll add our own method in userSchema, and we can use that later whenever we want.
+// In that we'll compare the password and return boolean based on the result.
+// And in updatePassword controller we'll use this.
+// And will check there if it is not matched then throw new error.
+// Otherwise update it in db using save(), so whenever we'll use save() on user the fn which we've in Usermodel userSchema.pre will execute and it will encrypt that password before saving it in db.

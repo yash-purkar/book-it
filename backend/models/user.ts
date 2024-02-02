@@ -1,5 +1,5 @@
 import mongoose, { Schema } from "mongoose";
-import bcrypt from 'bcryptjs';
+import bcrypt from "bcryptjs";
 export interface IUser {
   name: string;
   email: string;
@@ -12,6 +12,7 @@ export interface IUser {
   createdAt: Date;
   resetPasswordToken: string;
   resetPasswordExpire: Date;
+  comparePasswordCustomMethod: (enteredPassword: string) => Promise<boolean>;
 }
 
 const userSchema: Schema<IUser> = new Schema({
@@ -47,15 +48,22 @@ const userSchema: Schema<IUser> = new Schema({
 });
 
 // Encrypt the password before saving the user.
-userSchema.pre("save", async function(next) {
+userSchema.pre("save", async function (next) {
   // This refers to the new user
-  if (!this.isModified('password')) {
+  if (!this.isModified("password")) {
     // Means we have not made any changes in password field.
     next();
   }
-  this.password = await bcrypt.hash(this.password,10);
+  this.password = await bcrypt.hash(this.password, 10);
   // Salt means how much stronger password we need.
 });
+
+userSchema.methods.comparePasswordCustomMethod = async function (
+  enteredPassword: string
+): Promise<boolean> {
+  // This refers to the user
+  return await bcrypt.compare(enteredPassword, this.password);
+};
 
 export default mongoose.models.User ||
   mongoose.model<IUser>("User", userSchema);
