@@ -384,3 +384,14 @@ pages: {
       signIn: "/login",
     },
     so it'll redirect to /login rather than default page.
+
+
+
+// NESTED LAYOUT FOR USER PROFILE
+
+We've created nested layout.tsx In /me so Whatever call we do like 
+/me/update
+/me/update-password
+/me/forgot-password
+
+That will pass to the layout as a children (Not sure) and we are Rendering that.
