@@ -54,7 +54,6 @@ async function auth(request: NextApiRequest, response: NextApiResponse) {
           const updatedUser = await User.findById(jwtToken.user._id);
           token.user = updatedUser;
         }
-        console.log("Token", token);
         return token;
       },
       session: async ({ session, token }) => {
