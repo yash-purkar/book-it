@@ -403,3 +403,11 @@ That will pass to the layout as a children (Not sure) and we are Rendering that.
 // And in updatePassword controller we'll use this.
 // And will check there if it is not matched then throw new error.
 // Otherwise update it in db using save(), so whenever we'll use save() on user the fn which we've in Usermodel userSchema.pre will execute and it will encrypt that password before saving it in db.
+
+//UPDATE PASSWORD
+So we'll update the user password
+1st create the Mutation for the same updatePassword
+then create components for that
+and store the passwords in state.
+and call the useUpdatePasswordMutatin() to get updatePassword and call that in form handler.
+and handle error success and etc.. states in useEffect.

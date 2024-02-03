@@ -49,7 +49,7 @@ export const updatePassword = catchAsyncError(async (request: NextRequest) => {
   const body = await request.json();
 
   // @ts-ignore
-  const user = await User.findById("65b4df8c403c8a03ccb1c3dd").select("+password");
+  const user = await User.findById(request.user._id).select("+password");
 
   const isPasswordMatched = await user.comparePasswordCustomMethod(body.oldPassword);
 
@@ -57,7 +57,7 @@ export const updatePassword = catchAsyncError(async (request: NextRequest) => {
     throw new ErrorHandler("Old password is incorrect!",400);
   }
 
-  user.password = body.password;
+  user.password = body.newPassword;
   await user.save();
 
   return NextResponse.json({ success: true });

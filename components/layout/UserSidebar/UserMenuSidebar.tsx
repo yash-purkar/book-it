@@ -21,7 +21,7 @@ const menuItems: MenuItem[] = [
   },
   {
     name: "Update Password",
-    url: "/me/update-password",
+    url: "/me/update_password",
     icon: "fas fa-lock",
   },
 ];
