@@ -411,3 +411,10 @@ then create components for that
 and store the passwords in state.
 and call the useUpdatePasswordMutatin() to get updatePassword and call that in form handler.
 and handle error success and etc.. states in useEffect.
+
+
+//CLOUDINARY
+create account on CLOUDINARY.
+and set up it in backend / utils /cloudinary.ts
+
+and created a function there to upload a file and delete a file
