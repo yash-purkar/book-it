@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { catchAsyncError } from "../middlewares/catchAsyncError";
 import User from "../models/user";
 import ErrorHandler from "../utils/errorHandler";
+import { delete_file, upload_file } from "../utils/cloudinary";
 
 // Add new User /api/auth/register
 export const registerUser = catchAsyncError(async (request: NextRequest) => {
@@ -49,16 +50,39 @@ export const updatePassword = catchAsyncError(async (request: NextRequest) => {
   const body = await request.json();
 
   // @ts-ignore
-  const user = await User.findById("65b4df8c403c8a03ccb1c3dd").select("+password");
+  const user = await User.findById(request.user._id).select("+password");
 
-  const isPasswordMatched = await user.comparePasswordCustomMethod(body.oldPassword);
+  const isPasswordMatched = await user.comparePasswordCustomMethod(
+    body.oldPassword
+  );
 
-  if(!isPasswordMatched){
-    throw new ErrorHandler("Old password is incorrect!",400);
+  if (!isPasswordMatched) {
+    throw new ErrorHandler("Old password is incorrect!", 400);
   }
 
-  user.password = body.password;
+  user.password = body.newPassword;
   await user.save();
 
   return NextResponse.json({ success: true });
+});
+
+// Upload user avatar /api/me/upload_avatar
+export const uploadAvatar = catchAsyncError(async (request: NextRequest) => {
+  const body = await request.json();
+
+  // Upload file to cloudinary.
+  const avatarUploadResult = await upload_file(body.avatar, "bookit/avatar");
+  console.log({ avatarUploadResult });
+
+  // Delete avatar from cloudinary if user already has avatar.
+  if (request.user.avatar) {
+    await delete_file(request.user.avatar.public_id);
+  }
+
+  // @ts-ignore
+  const user = await User.findByIdAndUpdate(request.user._id, {
+    avatar: avatarUploadResult,
+  });
+
+  return NextResponse.json({ Success: true });
 });
