@@ -101,7 +101,7 @@ if(!user) {
   throw new ErrorHandler("There is no user associated with this email.",404)
 }
 
-//Get the token 
+//Get the token.
 const resetPasswordToken = user.getResetPasswordToken();
 
 // bcz we are adding token and time in db in getResetPasswordToken();

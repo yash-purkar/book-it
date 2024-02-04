@@ -530,4 +530,8 @@ and if it fails we'll again set the token undefined and expire time undefined in
 
 then we need to send email.
 
-Don't fogot to update with actual password.
+Don't fogot to update the mailtrap password with actual password.
+
+
+//FORGOT PASSWORD COMPONENT
+create mutation for this in authApi and then use That hook in forgotPassword comp and call it onSubmit;
