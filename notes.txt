@@ -563,3 +563,9 @@ In getResetPasswordToken() 1st we generate the token and then we created hash fo
 And in url we psased generated token not hash.
 So when user will click on btn to reset the generated token will be there in url not hash token.
 And when we reset the password we'll get that generated token from params and hash that to match with hashed token in db.
+
+
+// RESET PASSWORD COMPONENT
+1st create component 
+create mutation call the mutation fn in component in submit handler.
+and it'll handle that.

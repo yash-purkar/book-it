@@ -162,7 +162,7 @@ export const resetPassword = catchAsyncError(
       );
     }
     if(body.password !== body.confirmPassword) {
-      throw new ErrorHandler("Both Passwords should match.",400)
+      throw new ErrorHandler("Both Passwords should be matched.",400)
     }
 
     // If everything is fine
