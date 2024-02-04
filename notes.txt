@@ -559,4 +559,7 @@ And if user is not there we'll throw an error.
 if both passwords not match we'll throw an error
 if everything is fine we'll set the password as a password  and resetPasswordToken and resetPasswordExpire to undefined.
 
-
+In getResetPasswordToken() 1st we generate the token and then we created hash for that and stored that hash in db and return generated token not hash.
+And in url we psased generated token not hash.
+So when user will click on btn to reset the generated token will be there in url not hash token.
+And when we reset the password we'll get that generated token from params and hash that to match with hashed token in db.

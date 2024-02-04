@@ -91,7 +91,6 @@ export const uploadAvatar = catchAsyncError(async (request: NextRequest) => {
 });
 
 // Forgot password - /api/password/forgot
-
 export const forgotPassword = catchAsyncError(async (request: NextRequest) => {
   const body = await request.json();
 
@@ -144,14 +143,14 @@ export const resetPassword = catchAsyncError(
     const body = await request.json();
 
     // Hash the token which is in url.
-    // const resetPasswordToken = crypto
-    //   .createHash("sha256")
-    //   .update(params.token)
-    //   .digest("hex");
+    const resetPasswordToken = crypto
+      .createHash("sha256")
+      .update(params.token)
+      .digest("hex");
 
       // find the user with token
     const user = await User.findOne({
-      resetPasswordToken:params.token,
+      resetPasswordToken:resetPasswordToken,
       resetPasswordExpire: { $gt: Date.now() },
     });
 
