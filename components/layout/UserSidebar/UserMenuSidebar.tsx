@@ -16,7 +16,7 @@ const menuItems: MenuItem[] = [
   { name: "Update Profile", url: "/me/update", icon: "fas fa-user" },
   {
     name: "Upload Avatar",
-    url: "/me/upload-avatar",
+    url: "/me/upload_avatar",
     icon: "fas fa-user-circle",
   },
   {

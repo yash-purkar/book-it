@@ -33,7 +33,7 @@ const userSchema: Schema<IUser> = new Schema({
   },
   avatar: {
     public_id: String,
-    url: String,
+    url: { type: String, default: "/images/default_avatar.jpg" },
   },
   role: {
     type: String,

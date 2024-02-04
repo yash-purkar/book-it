@@ -11,12 +11,12 @@ export const Header = () => {
   const { user } = useAppSelector((state) => state.auth);
   const { data } = useSession();
 
-useEffect(()=>{
-  if(data?.user){
-    dispatch(setUser(data.user));
-    dispatch(setIsAuthenticated(true));
-  }
-},[data]);
+  useEffect(() => {
+    if (data?.user) {
+      dispatch(setUser(data.user));
+      dispatch(setIsAuthenticated(true));
+    }
+  }, [data]);
 
   const handleLogout = () => {
     signOut();
@@ -49,16 +49,14 @@ useEffect(()=>{
               >
                 <figure className={`${styles.avatar} avatar-nav`}>
                   <img
-                    src="/images/default_avatar.jpg"
+                    src={user?.avatar?.url}
                     alt="John Doe"
                     className={`${styles["rounded-circle"]} placeholder-glow`}
                     height="50"
                     width="50"
                   />
                 </figure>
-                <span className="placeholder-glow ps-1">
-                  {user?.name}
-                </span>
+                <span className="placeholder-glow ps-1">{user?.name}</span>
               </button>
 
               <div
