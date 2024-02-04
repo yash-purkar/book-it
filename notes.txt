@@ -535,3 +535,28 @@ Don't fogot to update the mailtrap password with actual password.
 
 //FORGOT PASSWORD COMPONENT
 create mutation for this in authApi and then use That hook in forgotPassword comp and call it onSubmit;
+
+// RESET PASSWORD endpoint
+1st create controller 
+in that we'll get the token from url 
+params :{ token}  like this
+
+and then we'll use same code to hash this token again;
+this time we'll pass the token which is in url to match with the token which is in db.
+
+so we'll find the user in db with reset passwrod token. And we'll also check is that token expired. using mongoose operators
+  const resetPasswordToken = crypto
+    .createHash("sha256")
+    .update(params.token)
+    .digest("hex");
+    const user = await User.findOne({
+      resetPasswordToken,
+      resetPasswordExpire: {$gt: Date.now()}
+    })
+gt means greater than so it will check is that expire time is greater than current or not, bcz we've set 30 mins time there in db means 30 mins after reset link.
+
+And if user is not there we'll throw an error.
+if both passwords not match we'll throw an error
+if everything is fine we'll set the password as a password  and resetPasswordToken and resetPasswordExpire to undefined.
+
+
