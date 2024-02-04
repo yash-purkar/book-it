@@ -1,5 +1,6 @@
 import mongoose, { Schema } from "mongoose";
 import bcrypt from "bcryptjs";
+import crypto from "crypto";
 export interface IUser {
   name: string;
   email: string;
@@ -63,6 +64,19 @@ userSchema.methods.comparePasswordCustomMethod = async function (
 ): Promise<boolean> {
   // This refers to the user
   return await bcrypt.compare(enteredPassword, this.password);
+};
+
+// This function generates resetPassword token
+userSchema.methods.getResetPasswordToken = function (): string {
+  //Generating token
+  const resetToken = crypto.randomBytes(20).toString("hex");
+
+  // Hasing for security purpose.
+  this.resetPasswordToken = crypto
+    .createHash("sha256")
+    .update(resetToken)
+    .digest("hex");
+  return resetToken;
 };
 
 export default mongoose.models.User ||

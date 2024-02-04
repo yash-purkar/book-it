@@ -443,3 +443,48 @@ so it'll read that file and then it'll set it.
 //MENU SIDEBAR BUG 
 If we are on updateProfile page and we go on updatePassword the updatePassword link will be active but if we refresh the page we'll be on updatePassword but the updateProfile link will be active to fixed this bug.
 we are taking the url from url and then adding condition on it.
+
+// ******************************************
+
+FORGOT PASSWORD AND RESET PASSWORD
+
+If user forgot the password we'll allow user to send the email to reset it.
+we've   resetPasswordToken: String,
+  resetPasswordExpire: Date, 
+  In model 
+  so we'll generate the token and store it in resetPasswordToken. 
+  and we'll store expire time in resetPasswordExpire which will be 30mins.
+// So user can reset the password with this token within 30mins.
+WE'LL use crypto package for this. It is inbuilt package in node js.
+
+//Generating the token
+userSchema.methods.getResetPasswordToken = function() {
+  //generating token
+  *** const resetoken = crypto.randomBytes(20).toString('hex');
+
+  crypto.randomBytes will generate buffer of 20 random bytes.
+  It would look like 
+  Buffer: <Buffer 8d a4 3f 91 2c 6e 5a 9b a7 7d> // 10 bytes buffer
+  and then we are converting it to hexadecimal string.
+  so it would look like
+  Hexadecimal Value: 8da43f912c6e5a9ba77d
+
+  Now we need to hash it for security purpose.
+  
+  this.resetPasswordToken = crypto.createHash('sha256').update(resetToken).digest('hex');
+
+  crypto.createHash('sha256') => Creates a new hash object using the SHA-256 algorithm from the crypto module in Node.js.
+
+  .update(resetToken) => It needs to convert into hash.
+  
+  .digest('hex') => generates the hash in hex format. (Converts the binary hash into a human-readable string of hexadecimal characters).
+
+
+// Now we need to set token expiry date 
+this.resetPasswordExpire = Date.now() + 30 * 60 * 1000;
+30mins * 60sec * 1000ml
+Result: 1,800,000 milliseconds, which is equivalent to 30 minutes.
+
+return resetToken;
+//we'll send this token to user's email.
+}
