@@ -424,5 +424,148 @@ and created a function there to upload a file and delete a file
 1st create controller.
 Create route for this and handle request there and call this middleware with put request.
 
+//UPLOAD AVATAR UI
+created comp 
+and we'll have 2 states there 1 to send the new image to backend and another for preview.
+And need there user to show the avatar if user already has.
+
+And in onChange we got all files using e.target.files adn used Array.from()
 The Array.from() static method creates a new, shallow-copied Array instance from an iterable or array-like object.
 
+And now we need fileReader to read the file and display in preview.
+
+And then we check is readyState 2 means file is ready we'll set in avatar and preview.
+
+and then we'll call reader.readAsDataURL(files[0]); And when it will complete then it will triggered onload.
+so it'll read that file and then it'll set it.
+// Cloudinary not working properly, we'll figure it out later
+
+//MENU SIDEBAR BUG 
+If we are on updateProfile page and we go on updatePassword the updatePassword link will be active but if we refresh the page we'll be on updatePassword but the updateProfile link will be active to fixed this bug.
+we are taking the url from url and then adding condition on it.
+
+// ******************************************
+
+FORGOT PASSWORD AND RESET PASSWORD
+
+If user forgot the password we'll allow user to send the email to reset it.
+we've   resetPasswordToken: String,
+  resetPasswordExpire: Date, 
+  In model 
+  so we'll generate the token and store it in resetPasswordToken. 
+  and we'll store expire time in resetPasswordExpire which will be 30mins.
+// So user can reset the password with this token within 30mins.
+WE'LL use crypto package for this. It is inbuilt package in node js.
+
+//Generating the token
+userSchema.methods.getResetPasswordToken = function() {
+  //generating token
+  *** const resetoken = crypto.randomBytes(20).toString('hex');
+
+  crypto.randomBytes will generate buffer of 20 random bytes.
+  It would look like 
+  Buffer: <Buffer 8d a4 3f 91 2c 6e 5a 9b a7 7d> // 10 bytes buffer
+  and then we are converting it to hexadecimal string.
+  so it would look like
+  Hexadecimal Value: 8da43f912c6e5a9ba77d
+
+  Now we need to hash it for security purpose.
+  
+  this.resetPasswordToken = crypto.createHash('sha256').update(resetToken).digest('hex');
+
+  crypto.createHash('sha256') => Creates a new hash object using the SHA-256 algorithm from the crypto module in Node.js.
+
+  .update(resetToken) => It needs to convert into hash.
+  
+  .digest('hex') => generates the hash in hex format. (Converts the binary hash into a human-readable string of hexadecimal characters).
+
+
+// Now we need to set token expiry date 
+this.resetPasswordExpire = Date.now() + 30 * 60 * 1000;
+30mins * 60sec * 1000ml
+Result: 1,800,000 milliseconds, which is equivalent to 30 minutes.
+
+return resetToken;
+//we'll send this token to user's email.
+}
+
+
+//SETUP NODEMAILER AND EMAIL HTML TEMPLATE
+1ST sign up on mailtrap
+
+we'll get creds and api keys there if we select nodemailer in integration.
+now we need to install nodemailer.
+npm i nodemailer
+
+create a file in backend/utils sendEmail.ts
+in that create a fn and we'll call this fn from controller with the data email , subject and message
+Now set the values in .env
+and create a transport.
+and create a message like - from yash <bookit.......com>
+and use transport.sendEmail(message) to send the mail to user.
+
+Now we need to create a email template which user will see.
+so in utils we'll create new file emailTemplate.ts
+and there will add the html code.
+
+And we'll use that in SendEmail
+
+// RESET PASSWORD RECOVERY EMAIL
+1st we'll create controller for this and then we'll create api endpoint
+
+in controller 1st we'll find that user with email entered by user.
+if user isn't there in db we'll throw error. 
+if user is there we'll get the token and do use.save()
+
+ now we need to create url and message to pass it to get emailhtmltemplate
+so 
+/ url where user will redirect
+const requestUrl = `${process.env.API_URL}/password/reset/${resetPasswordToken}`
+
+const message = resetPasswordHTMLTemplate(user.name,requestUrl)
+
+and we'll call sendEmail fn and pass the values accordingly
+
+and if it fails we'll again set the token undefined and expire time undefined in db.
+
+then we need to send email.
+
+Don't fogot to update the mailtrap password with actual password.
+
+
+//FORGOT PASSWORD COMPONENT
+create mutation for this in authApi and then use That hook in forgotPassword comp and call it onSubmit;
+
+// RESET PASSWORD endpoint
+1st create controller 
+in that we'll get the token from url 
+params :{ token}  like this
+
+and then we'll use same code to hash this token again;
+this time we'll pass the token which is in url to match with the token which is in db.
+
+so we'll find the user in db with reset passwrod token. And we'll also check is that token expired. using mongoose operators
+  const resetPasswordToken = crypto
+    .createHash("sha256")
+    .update(params.token)
+    .digest("hex");
+    const user = await User.findOne({
+      resetPasswordToken,
+      resetPasswordExpire: {$gt: Date.now()}
+    })
+gt means greater than so it will check is that expire time is greater than current or not, bcz we've set 30 mins time there in db means 30 mins after reset link.
+
+And if user is not there we'll throw an error.
+if both passwords not match we'll throw an error
+if everything is fine we'll set the password as a password  and resetPasswordToken and resetPasswordExpire to undefined.
+
+In getResetPasswordToken() 1st we generate the token and then we created hash for that and stored that hash in db and return generated token not hash.
+And in url we psased generated token not hash.
+So when user will click on btn to reset the generated token will be there in url not hash token.
+And when we reset the password we'll get that generated token from params and hash that to match with hashed token in db.
+
+
+// RESET PASSWORD COMPONENT
+1st create component 
+create mutation call the mutation fn in component in submit handler.
+and it'll handle that.
