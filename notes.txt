@@ -493,7 +493,7 @@ return resetToken;
 //SETUP NODEMAILER AND EMAIL HTML TEMPLATE
 1ST sign up on mailtrap
 
-we'll get creds and api keys there if we select nodemail in integration.
+we'll get creds and api keys there if we select nodemailer in integration.
 now we need to install nodemailer.
 npm i nodemailer
 
@@ -507,3 +507,27 @@ and use transport.sendEmail(message) to send the mail to user.
 Now we need to create a email template which user will see.
 so in utils we'll create new file emailTemplate.ts
 and there will add the html code.
+
+And we'll use that in SendEmail
+
+// RESET PASSWORD RECOVERY EMAIL
+1st we'll create controller for this and then we'll create api endpoint
+
+in controller 1st we'll find that user with email entered by user.
+if user isn't there in db we'll throw error. 
+if user is there we'll get the token and do use.save()
+
+ now we need to create url and message to pass it to get emailhtmltemplate
+so 
+/ url where user will redirect
+const requestUrl = `${process.env.API_URL}/password/reset/${resetPasswordToken}`
+
+const message = resetPasswordHTMLTemplate(user.name,requestUrl)
+
+and we'll call sendEmail fn and pass the values accordingly
+
+and if it fails we'll again set the token undefined and expire time undefined in db.
+
+then we need to send email.
+
+Don't fogot to update with actual password.

@@ -14,6 +14,7 @@ export interface IUser {
   resetPasswordToken: string;
   resetPasswordExpire: Date;
   comparePasswordCustomMethod: (enteredPassword: string) => Promise<boolean>;
+  getResetPasswordToken:() => string;
 }
 
 const userSchema: Schema<IUser> = new Schema({
@@ -71,11 +72,14 @@ userSchema.methods.getResetPasswordToken = function (): string {
   //Generating token
   const resetToken = crypto.randomBytes(20).toString("hex");
 
-  // Hasing for security purpose.
+  // Hashing for security purpose.
   this.resetPasswordToken = crypto
     .createHash("sha256")
     .update(resetToken)
     .digest("hex");
+
+    //It will set 30min time
+    this.resetPasswordExpire = Date.now() + 30 *60 *1000;
   return resetToken;
 };
 
