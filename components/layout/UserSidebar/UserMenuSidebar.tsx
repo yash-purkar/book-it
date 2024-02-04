@@ -3,6 +3,7 @@
 import Link from "next/link";
 import React, { ReactNode, useState } from "react";
 import styles from './UserMenuSidebar.module.css'
+import { usePathname } from "next/navigation";
 
 type Menu = "Update Profile" | "Upload Avatar" | "Update Password";
 
@@ -27,8 +28,8 @@ const menuItems: MenuItem[] = [
 ];
 
 export const UserMenuSidebar = () => {
-const [activeMenu,setActiveMenu] = useState<Menu>(menuItems[0].name);
-
+  const url = usePathname();
+const [activeMenu,setActiveMenu] = useState<string>(url);
 const handleTabChange = (menuItem:Menu) => {
   setActiveMenu(menuItem)
 }
@@ -40,8 +41,8 @@ const handleTabChange = (menuItem:Menu) => {
           <Link
             key={item.name}
             href={item.url}
-            className={`fw-bold ${styles['list-group-item']} list-group-item-action ${item.name === activeMenu && styles['active']}`}
-            aria-current={activeMenu === item.name ? "true" : "false"}
+            className={`fw-bold ${styles['list-group-item']} list-group-item-action ${item.url === activeMenu && styles['active']}`}
+            aria-current={activeMenu === item.url ? "true" : "false"}
             onClick={() =>handleTabChange(item.name)}
           >
             <i className={item.icon}></i>{" "}

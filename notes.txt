@@ -439,3 +439,7 @@ And then we check is readyState 2 means file is ready we'll set in avatar and pr
 and then we'll call reader.readAsDataURL(files[0]); And when it will complete then it will triggered onload.
 so it'll read that file and then it'll set it.
 // Cloudinary not working properly, we'll figure it out later
+
+//MENU SIDEBAR BUG 
+If we are on updateProfile page and we go on updatePassword the updatePassword link will be active but if we refresh the page we'll be on updatePassword but the updateProfile link will be active to fixed this bug.
+we are taking the url from url and then adding condition on it.
