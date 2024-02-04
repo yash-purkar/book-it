@@ -488,3 +488,22 @@ Result: 1,800,000 milliseconds, which is equivalent to 30 minutes.
 return resetToken;
 //we'll send this token to user's email.
 }
+
+
+//SETUP NODEMAILER AND EMAIL HTML TEMPLATE
+1ST sign up on mailtrap
+
+we'll get creds and api keys there if we select nodemail in integration.
+now we need to install nodemailer.
+npm i nodemailer
+
+create a file in backend/utils sendEmail.ts
+in that create a fn and we'll call this fn from controller with the data email , subject and message
+Now set the values in .env
+and create a transport.
+and create a message like - from yash <bookit.......com>
+and use transport.sendEmail(message) to send the mail to user.
+
+Now we need to create a email template which user will see.
+so in utils we'll create new file emailTemplate.ts
+and there will add the html code.
