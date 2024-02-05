@@ -51,8 +51,16 @@ export const UploadAvatar = () => {
   };
 
   useEffect(() => {
-    if (error) {
-      toast.error("Somthing went wrong! Please try again later.");
+    if (isError && error && "data" in error) {
+      toast.error(
+        // @ts-ignore
+        error.data?.errorMessage ?? (
+          <span>
+            Something went wrong! Plese try again
+            later
+          </span>
+        )
+      );
     }
     if (isSuccess) {
       toast.success("Avatar uploaded");
