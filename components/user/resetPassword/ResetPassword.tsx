@@ -17,7 +17,6 @@ export const ResetPassword: React.FC<ResetPasswordProps> = ({ token }) => {
   const [resetPassword, { isSuccess,error,isLoading,isError }] = useResetPasswordMutation();
 
   useEffect(() => {
-    console.log({error})
     if (isError && error && "data" in error) {
         toast.error(
           // @ts-ignore
