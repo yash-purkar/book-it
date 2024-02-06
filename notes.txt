@@ -569,3 +569,12 @@ And when we reset the password we'll get that generated token from params and ha
 1st create component 
 create mutation call the mutation fn in component in submit handler.
 and it'll handle that.
+
+
+
+
+
+// BOOKING model
+create the schema and export it model
+We've used ref there in room and in user so 
+room is of type mongoose.Types.ObjectId, indicating that it should be an ObjectId. The ref property specifies that it refers to the "Room" model.
