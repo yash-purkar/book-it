@@ -39,7 +39,6 @@ export const updateProfile = catchAsyncError(async (request: NextRequest) => {
     email: body.email,
   };
 
-  // @ts-ignore
   const user = await User.findByIdAndUpdate(request.user._id, userData);
 
   return NextResponse.json({
@@ -52,7 +51,6 @@ export const updateProfile = catchAsyncError(async (request: NextRequest) => {
 export const updatePassword = catchAsyncError(async (request: NextRequest) => {
   const body = await request.json();
 
-  // @ts-ignore
   const user = await User.findById(request.user._id).select("+password");
 
   const isPasswordMatched = await user.comparePasswordCustomMethod(
@@ -82,7 +80,6 @@ export const uploadAvatar = catchAsyncError(async (request: NextRequest) => {
     await delete_file(request.user.avatar.public_id);
   }
 
-  // @ts-ignore
   const user = await User.findByIdAndUpdate(request.user._id, {
     avatar: avatarUploadResult,
   });
