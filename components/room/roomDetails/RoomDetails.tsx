@@ -48,7 +48,7 @@ export const RoomDetails = ({ data }: RoomDetailsProps) => {
           </div>
 
           <div className="col-12 col-md-6 col-lg-4">
-            <RoomBookingDatePicker />
+            <RoomBookingDatePicker room={room} />
 
             {/* Room Location Map */}
           </div>

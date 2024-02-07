@@ -578,3 +578,27 @@ and it'll handle that.
 create the schema and export it model
 We've used ref there in room and in user so 
 room is of type mongoose.Types.ObjectId, indicating that it should be an ObjectId. The ref property specifies that it refers to the "Room" model.
+
+
+// Booking Date picker
+Install - npm install react-datepicker --save
+We can see all the available datepickers here - https://reactdatepicker.com/
+
+import the css for the datepicker from dist .....
+that datepicker takes some props 
+        selected= selected date we can give today's date.
+        onChange={handleDateChange}
+        startDate= if we give today's date the previous dates will be disabled.
+        endDate= end date
+        selectRange - we can select date in range
+        inline - we can see the calender of selected date if this prop isn't there we'll see selcted date in input box.
+
+
+
+// ADDING NEW BOOKING
+
+Created the controller
+we defined endpoint
+we created mutation
+added reducer of this in store
+used mutation in frontend
