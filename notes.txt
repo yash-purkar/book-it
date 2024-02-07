@@ -592,3 +592,13 @@ that datepicker takes some props
         endDate= end date
         selectRange - we can select date in range
         inline - we can see the calender of selected date if this prop isn't there we'll see selcted date in input box.
+
+
+
+// ADDING NEW BOOKING
+
+Created the controller
+we defined endpoint
+we created mutation
+added reducer of this in store
+used mutation in frontend
