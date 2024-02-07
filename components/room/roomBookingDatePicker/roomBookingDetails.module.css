@@ -1,0 +1,18 @@
+.react-datepicker {
+  width: 100%;
+}
+
+.react-datepicker__month-container {
+  float: left;
+  width: 100%;
+}
+
+.price-per-night {
+  font-size: 1.3rem;
+}
+
+.booking-card {
+  border: 1px solid #e3e3e3;
+  border-radius: 20px;
+  padding: 5px 10px;
+}
