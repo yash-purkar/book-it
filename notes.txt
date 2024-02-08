@@ -602,3 +602,24 @@ we defined endpoint
 we created mutation
 added reducer of this in store
 used mutation in frontend
+
+
+//CHECK ROOM AVAILABILITY
+1st we'll get the roomId, checkInDate, checkoutDate from url .
+
+And we've added condition there 
+ const bookings: IBooking[] = await Booking.find({
+
+    room:roomId,
+    $and : [
+      {checkInDate : {$lte : checkoutDate}},
+      {checkoutDae: {$gte: checkInDate}}
+    ]
+  });
+
+  // It 1st we find by room id and then 
+  checkInDate in DB should be less than checkoutDate which is in query.
+  And 
+  checkoutDate in DB shold be greater than checkInDate which is in query.
+
+  It will return the rooms if there are this condition satisfied means rooms are already book.

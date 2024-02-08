@@ -1,6 +1,6 @@
 import mongoose, { Document, Schema, mongo } from "mongoose";
 
-interface IBooking extends Document {
+export interface IBooking extends Document {
   room: mongoose.Types.ObjectId;
   user: mongoose.Types.ObjectId;
   checkInDate: Date;
