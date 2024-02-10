@@ -4,7 +4,10 @@ import React, { useEffect, useState } from "react";
 import styles from "./roomBookingDetails.module.css";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { useNewBookingMutation } from "@/redux/api/bookingApi";
+import {
+  useLazyCheckBookingAvailabilityQuery,
+  useNewBookingMutation,
+} from "@/redux/api/bookingApi";
 import { calculateDaysOfStay } from "@/helpers/helpers";
 
 interface RoomBookingDatePickerProps {
@@ -18,12 +21,28 @@ export const RoomBookingDatePicker = ({ room }: RoomBookingDatePickerProps) => {
 
   const [newBooking] = useNewBookingMutation();
 
-useEffect(() => {
-  if (checkInDate && checkoutDate) {
-    const difference = calculateDaysOfStay(checkInDate, checkoutDate);
-    setDaysOfStay(difference);
-  }
-},[checkInDate,checkoutDate])
+  const [checkBookingAvailability, { data }] =
+    useLazyCheckBookingAvailabilityQuery();
+
+  const isAvailable = data?.isAvailable;
+
+  const handleDateChange = (dates: Date[]) => {
+    const [checkIn, checkOut] = dates;
+    if (checkIn && checkOut) {
+      setCheckInDate(checkIn);
+      setCheckoutDate(checkOut);
+
+      const difference = calculateDaysOfStay(checkIn, checkOut);
+      setDaysOfStay(difference);
+
+      //Check is room available or not.
+      checkBookingAvailability({
+        id: room._id,
+        checkInDate: checkIn.toISOString(),
+        checkoutDate: checkOut.toISOString(),
+      });
+    }
+  };
 
   const handleClick = () => {
     const newBookingPayload = {
@@ -40,13 +59,6 @@ useEffect(() => {
     newBooking(newBookingPayload);
   };
 
-  const handleDateChange = (dates: Date[]) => {
-    const [checkIn, checkOut] = dates;
-    if (checkIn && checkOut) {
-      setCheckInDate(checkIn);
-      setCheckoutDate(checkOut);
-    }
-  };
   return (
     <div className={`${styles["booking-card"]} shadow p-4`}>
       <p className={styles["price-per-night"]}>
@@ -63,6 +75,19 @@ useEffect(() => {
         selectsRange
         inline
       />
+      {checkoutDate && (
+        <>
+          {isAvailable ? (
+            <div className="alert alert-success my-3">
+              Room is Available. Book Now!
+            </div>
+          ) : (
+            <div className="alert alert-danger my-3">
+              Room isn't available. Try different dates!
+            </div>
+          )}
+        </>
+      )}
       <button
         onClick={handleClick}
         className={`btn ${styles["form-btn"]} py-3 w-100`}

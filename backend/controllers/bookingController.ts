@@ -13,7 +13,7 @@ export const newBooking = catchAsyncError(async (request: NextRequest) => {
     amountPaid,
     paymentInfo,
   } = body;
-  console.log({ user: request.user });
+
   const booking = new Booking({
     user: request.user._id,
     room,
@@ -53,6 +53,6 @@ export const checkRoomAvailability = catchAsyncError(async (request:NextRequest)
   const isAvailable: Boolean = bookings.length === 0;
 
   return NextResponse.json({
-    Success: TextTrackCue,
+    isAvailable,
   });
 });
