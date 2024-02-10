@@ -13,7 +13,7 @@ export const newBooking = catchAsyncError(async (request: NextRequest) => {
     amountPaid,
     paymentInfo,
   } = body;
-  console.log({ user: request.user });
+
   const booking = new Booking({
     user: request.user._id,
     room,
@@ -40,18 +40,19 @@ export const checkRoomAvailability = catchAsyncError(async (request:NextRequest)
   const checkInDate: Date = new Date(searchParams.get("checkInDate") as string);
   const checkoutDate: Date = new Date(searchParams.get("checkoutDate") as string);
 
-  // It returns the booking if there is booking with this condition.
+  // It returns the bookings if there is booking with this condition.
   const bookings: IBooking[] = await Booking.find({
     room:roomId,
     $and : [
       {checkInDate : {$lte : checkoutDate}},
-      {checkoutDae: {$gte: checkInDate}}
+      {checkoutDate: {$gte: checkInDate}}
     ]
   });
 
+  // If the length is 0 means there are no bookings, If length is not 0 we've some bookings.
   const isAvailable: Boolean = bookings.length === 0;
 
   return NextResponse.json({
-    Success: TextTrackCue,
+    isAvailable,
   });
 });

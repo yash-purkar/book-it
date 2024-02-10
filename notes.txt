@@ -623,3 +623,20 @@ And we've added condition there
   checkoutDate in DB shold be greater than checkInDate which is in query.
 
   It will return the rooms if there are this condition satisfied means rooms are already book.
+
+  // CHECKING ROOM AVAILABILITY ON FRONTEND.
+  create a endpoint in redux query then in url we'll pass roomId, checkInDate, and checkoutDate. and we'll get this in backend to check availability.
+
+  And export this endpoint as lazy because we want to call this once user selects the date.
+  checkBookingAvailability
+  use
+
+  now in roomDatepicker
+  get this using useLazyCheckBookingAvailabilityQuery
+  and we'll pass this to query to pass it to backend
+
+  And in RoomBookingDatePicker call this fn in onChange so we'll know the availability on change of date and we'll show the message accordingly.
+
+  We've condition there checkoutDate && .... 
+and inside this isAvailable 
+-checout Is for we don't want to show that availabilty message before we select the date.
