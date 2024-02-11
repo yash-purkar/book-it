@@ -640,3 +640,16 @@ And we've added condition there
   We've condition there checkoutDate && .... 
 and inside this isAvailable 
 -checout Is for we don't want to show that availabilty message before we select the date.
+
+
+// GET BOOKED ROOM DATES
+1st get the roomId from the query.
+then find the all bookings with that room Id.
+
+then use moment-range package to get the dates between checkindate and checkout date.
+e.g we've booking from 10 to 15
+so it'll give us the 5 dates.
+And we want that in array so we used Array.from()
+It'll push the date one by one in that array and at the end it will return the array.
+And to converting a multi-dimensional array or an array of arrays into a one-dimensional array. 
+We want the diff between 'day' so we used 'day'.
