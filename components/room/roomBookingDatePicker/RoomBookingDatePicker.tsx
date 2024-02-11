@@ -5,6 +5,7 @@ import styles from "./roomBookingDetails.module.css";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import {
+  useGetRoomBookedDatesQuery,
   useLazyCheckBookingAvailabilityQuery,
   useNewBookingMutation,
 } from "@/redux/api/bookingApi";
@@ -24,14 +25,22 @@ export const RoomBookingDatePicker = ({ room }: RoomBookingDatePickerProps) => {
   const [checkBookingAvailability, { data }] =
     useLazyCheckBookingAvailabilityQuery();
 
+  const { data: { bookedDates = [] } = {} } = useGetRoomBookedDatesQuery({
+    id: room._id,
+  });
+
+  // Converting string dates into Date format.
+  const datesNeedToBeDisabled =
+    bookedDates.map((date: string) => new Date(date)) || [];
+
+  console.log({ bookedDates, datesNeedToBeDisabled });
   const isAvailable = data?.isAvailable;
 
   const handleDateChange = (dates: Date[]) => {
     const [checkIn, checkOut] = dates;
+    setCheckInDate(checkIn);
+    setCheckoutDate(checkOut);
     if (checkIn && checkOut) {
-      setCheckInDate(checkIn);
-      setCheckoutDate(checkOut);
-
       const difference = calculateDaysOfStay(checkIn, checkOut);
       setDaysOfStay(difference);
 
@@ -46,7 +55,7 @@ export const RoomBookingDatePicker = ({ room }: RoomBookingDatePickerProps) => {
 
   const handleClick = () => {
     const newBookingPayload = {
-      room: 1,
+      room: room._id,
       checkInDate,
       checkoutDate,
       daysOfStay,
@@ -74,8 +83,9 @@ export const RoomBookingDatePicker = ({ room }: RoomBookingDatePickerProps) => {
         endDate={checkoutDate}
         selectsRange
         inline
+        excludeDates={datesNeedToBeDisabled}
       />
-      {checkoutDate && (
+      {typeof data !== "undefined" && (
         <>
           {isAvailable ? (
             <div className="alert alert-success my-3">

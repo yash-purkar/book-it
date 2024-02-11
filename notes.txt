@@ -640,3 +640,109 @@ And we've added condition there
   We've condition there checkoutDate && .... 
 and inside this isAvailable 
 -checout Is for we don't want to show that availabilty message before we select the date.
+
+
+// GET BOOKED ROOM DATES
+1st get the roomId from the query.
+then find the all bookings with that room Id.
+
+then use moment-range package to get the dates between checkindate and checkout date.
+e.g we've booking from 10 to 15
+so it'll give us the 5 dates.
+And we want that in array so we used Array.from()
+It'll push the date one by one in that array and at the end it will return the array.
+And to converting a multi-dimensional array or an array of arrays into a one-dimensional array. 
+We want the diff between 'day' so we used 'day'.
+
+// DISABLED ALL THE DATES ON FRONTEND CALENDER
+1st create a query for this. and pass a room Id in url.
+
+Now in RoomBookingDatePicker component get the dates from backend 
+
+cosnt {data:{bookedDates}} = useGetBooked.....(room._id);
+
+now we'll get all the book dates. this date will be in string format. 
+We want each date in Date format to pass it to DatePicker to disbaled this.
+
+so we'll pass this dates to datePicker excludeDates={excludeDates}
+
+We've to use .add(1,"day") there in controller bcz we also want to disable checkout date which is in db. before it was not giving the checkout date so it was not disabling.
+
+
+//GET CURRENT USER BOOKINGS
+Create a controller to find the bookings with user id which is in req. we've set the user in request when we check for authentication.
+and then return the bookings.
+
+//GET BOOKING DETAILS
+Create a controller to get the booking details with given booking id.
+And create a route for this in api 
+/api/bookings/:id
+and in the controller we'll get this slug, to find the booking with this id.
+
+//GET CURRENT USER BOOKINGS
+Create a component in components and uesr MDBData table package to show the bookings in table.
+It has features like pagination, search , sort and etc..
+
+Now we've to create columns and rows for the table.
+so we'll create a fn setBookings and in this fn we'll set the columns and row and return those.
+
+Now create the columns with the lable, field and sort order.
+label will display in head of table,
+id need to associate to the row of table
+and sort is for sorting order
+
+so we'll add the objects in columns array. 
+and for rows we'll map through the all bookings and we'll push the data in row one by one.
+keys should be same as we have given field in coulumns
+push({
+  id:booking._id,
+  checkin:Date(booking.checkInDate).toLocalString('en-us');
+  and so on
+})
+
+
+And now in app create a folder bookings and in that we'll create a folder me.
+In that call this compo MyBookings.
+In this page we'll call the api to get all the bookings and we'll pass this to the MyBookings component.
+
+And the api to get the current user's bookings is protected so we need to pass the cookies in headers.
+so we'll pass 
+headers :{
+  Cookie: 'next-auth.session-token=enter token which is in cookie
+}
+
+And we also want to protect the bookings route on frontend so add this in middleware .ts
+
+Now in MyBookings we'll get the bookings so we'll just create a columns and rows and pass it to the MDBDatatable
+so fo the columns we need to pass the label , id and the sort for each column.
+And for the row we mapped through the booking and set the data for each row.
+And in rows for each row we've also created the action so we can perform on each row.
+
+
+//CREATE A FUNCTION TO GET A COOKIE WE WON'T HARD CODE IT IN URL
+create a file in Helpers -> authHeader.ts
+
+in that we'll get the cookie from the browser's cookies
+
+using cookies() of next/headers
+so we'll get all the cookies but here we want 'next-auth.session-token' so we'll get that 
+const nextCookies = cookies();
+const nextAuthSessionToken = nextCookies.get('next-auth.session-token');
+
+but there is an issue with it the cookie name on the production will be different.
+so we've to check that 
+
+we'll create a fn to check that, in that fn
+process.env === 'production' ? '__Secure-next-auth.session-token' : 'next-auth.session-token'
+
+const cookieName = call the above fn
+const nextAuthSessionToken = nextCookies.get(cookieName);
+const 
+and at the end we'll return 
+{
+  headers: {
+    Cookie: `${nextAuthSessionToken.name}=${nextAuthSessionToken.value},
+  }
+}
+
+WE'VE REMOVED NO-CACHE, IT WON'T GOING TO WORK IF WE USER COOKIES FETCH REQUESTS ARE NOT CACHED IF - THE FETCH REQUEST COMES AFTER THE USAGE OF HEADERS OR COOKIES.

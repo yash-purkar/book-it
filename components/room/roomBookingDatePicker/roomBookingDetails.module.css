@@ -5,6 +5,7 @@
 .react-datepicker__month-container {
   float: left;
   width: 100%;
+  user-select: none;
 }
 
 .price-per-night {
