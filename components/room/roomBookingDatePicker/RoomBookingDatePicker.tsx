@@ -28,9 +28,9 @@ export const RoomBookingDatePicker = ({ room }: RoomBookingDatePickerProps) => {
 
   const handleDateChange = (dates: Date[]) => {
     const [checkIn, checkOut] = dates;
+    setCheckInDate(checkIn);
+    setCheckoutDate(checkOut);
     if (checkIn && checkOut) {
-      setCheckInDate(checkIn);
-      setCheckoutDate(checkOut);
 
       const difference = calculateDaysOfStay(checkIn, checkOut);
       setDaysOfStay(difference);
@@ -75,7 +75,7 @@ export const RoomBookingDatePicker = ({ room }: RoomBookingDatePickerProps) => {
         selectsRange
         inline
       />
-      {checkoutDate && (
+      {(typeof data!=="undefined") && (
         <>
           {isAvailable ? (
             <div className="alert alert-success my-3">
