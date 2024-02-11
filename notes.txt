@@ -670,5 +670,11 @@ We've to use .add(1,"day") there in controller bcz we also want to disable check
 
 
 //GET CURRENT USER BOOKINGS
-Create a controller find the bookings with user id which is in req. we've set the user in request when we check for authentication.
+Create a controller to find the bookings with user id which is in req. we've set the user in request when we check for authentication.
 and then return the bookings.
+
+//GET BOOKING DETAILS
+Create a controller to get the booking details with given booking id.
+And create a route for this in api 
+/api/bookings/:id
+and in the controller we'll get this slug, to find the booking with this id.
