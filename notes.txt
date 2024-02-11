@@ -667,3 +667,8 @@ We want each date in Date format to pass it to DatePicker to disbaled this.
 so we'll pass this dates to datePicker excludeDates={excludeDates}
 
 We've to use .add(1,"day") there in controller bcz we also want to disable checkout date which is in db. before it was not giving the checkout date so it was not disabling.
+
+
+//GET CURRENT USER BOOKINGS
+Create a controller find the bookings with user id which is in req. we've set the user in request when we check for authentication.
+and then return the bookings.

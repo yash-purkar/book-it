@@ -85,7 +85,7 @@ export const getRoomBookedDates = catchAsyncError(
         momentRange
           .range(
             momentRange(booking.checkInDate),
-            momentRange(booking.checkoutDate).add(1,"day")
+            momentRange(booking.checkoutDate).add(1, "day")
           )
           .by("day")
       )
@@ -94,3 +94,10 @@ export const getRoomBookedDates = catchAsyncError(
     return NextResponse.json({ bookedDates });
   }
 );
+
+// Get current user bookings -> /api/bookings/me
+export const myBookings = catchAsyncError(async (request: NextRequest) => {
+  const bookings = await Booking.find({ user: request.user._id });
+
+  return NextResponse.json({ bookings });
+});
