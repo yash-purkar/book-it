@@ -717,3 +717,32 @@ Now in MyBookings we'll get the bookings so we'll just create a columns and rows
 so fo the columns we need to pass the label , id and the sort for each column.
 And for the row we mapped through the booking and set the data for each row.
 And in rows for each row we've also created the action so we can perform on each row.
+
+
+//CREATE A FUNCTION TO GET A COOKIE WE WON'T HARD CODE IT IN URL
+create a file in Helpers -> authHeader.ts
+
+in that we'll get the cookie from the browser's cookies
+
+using cookies() of next/headers
+so we'll get all the cookies but here we want 'next-auth.session-token' so we'll get that 
+const nextCookies = cookies();
+const nextAuthSessionToken = nextCookies.get('next-auth.session-token');
+
+but there is an issue with it the cookie name on the production will be different.
+so we've to check that 
+
+we'll create a fn to check that, in that fn
+process.env === 'production' ? '__Secure-next-auth.session-token' : 'next-auth.session-token'
+
+const cookieName = call the above fn
+const nextAuthSessionToken = nextCookies.get(cookieName);
+const 
+and at the end we'll return 
+{
+  headers: {
+    Cookie: `${nextAuthSessionToken.name}=${nextAuthSessionToken.value},
+  }
+}
+
+WE'VE REMOVED NO-CACHE, IT WON'T GOING TO WORK IF WE USER COOKIES FETCH REQUESTS ARE NOT CACHED IF - THE FETCH REQUEST COMES AFTER THE USAGE OF HEADERS OR COOKIES.
