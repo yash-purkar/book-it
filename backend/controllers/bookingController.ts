@@ -28,7 +28,8 @@ export const newBooking = catchAsyncError(async (request: NextRequest) => {
     paymentInfo,
     paidAt: Date.now(),
   });
-  booking.save();
+
+  await booking.save();
 
   return NextResponse.json({
     Success: true,
@@ -84,7 +85,7 @@ export const getRoomBookedDates = catchAsyncError(
         momentRange
           .range(
             momentRange(booking.checkInDate),
-            momentRange(booking.checkoutDate)
+            momentRange(booking.checkoutDate).add(1,"day")
           )
           .by("day")
       )

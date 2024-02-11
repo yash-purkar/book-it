@@ -653,3 +653,17 @@ And we want that in array so we used Array.from()
 It'll push the date one by one in that array and at the end it will return the array.
 And to converting a multi-dimensional array or an array of arrays into a one-dimensional array. 
 We want the diff between 'day' so we used 'day'.
+
+// DISABLED ALL THE DATES ON FRONTEND CALENDER
+1st create a query for this. and pass a room Id in url.
+
+Now in RoomBookingDatePicker component get the dates from backend 
+
+cosnt {data:{bookedDates}} = useGetBooked.....(room._id);
+
+now we'll get all the book dates. this date will be in string format. 
+We want each date in Date format to pass it to DatePicker to disbaled this.
+
+so we'll pass this dates to datePicker excludeDates={excludeDates}
+
+We've to use .add(1,"day") there in controller bcz we also want to disable checkout date which is in db. before it was not giving the checkout date so it was not disabling.
