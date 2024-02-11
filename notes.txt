@@ -678,3 +678,42 @@ Create a controller to get the booking details with given booking id.
 And create a route for this in api 
 /api/bookings/:id
 and in the controller we'll get this slug, to find the booking with this id.
+
+//GET CURRENT USER BOOKINGS
+Create a component in components and uesr MDBData table package to show the bookings in table.
+It has features like pagination, search , sort and etc..
+
+Now we've to create columns and rows for the table.
+so we'll create a fn setBookings and in this fn we'll set the columns and row and return those.
+
+Now create the columns with the lable, field and sort order.
+label will display in head of table,
+id need to associate to the row of table
+and sort is for sorting order
+
+so we'll add the objects in columns array. 
+and for rows we'll map through the all bookings and we'll push the data in row one by one.
+keys should be same as we have given field in coulumns
+push({
+  id:booking._id,
+  checkin:Date(booking.checkInDate).toLocalString('en-us');
+  and so on
+})
+
+
+And now in app create a folder bookings and in that we'll create a folder me.
+In that call this compo MyBookings.
+In this page we'll call the api to get all the bookings and we'll pass this to the MyBookings component.
+
+And the api to get the current user's bookings is protected so we need to pass the cookies in headers.
+so we'll pass 
+headers :{
+  Cookie: 'next-auth.session-token=enter token which is in cookie
+}
+
+And we also want to protect the bookings route on frontend so add this in middleware .ts
+
+Now in MyBookings we'll get the bookings so we'll just create a columns and rows and pass it to the MDBDatatable
+so fo the columns we need to pass the label , id and the sort for each column.
+And for the row we mapped through the booking and set the data for each row.
+And in rows for each row we've also created the action so we can perform on each row.
