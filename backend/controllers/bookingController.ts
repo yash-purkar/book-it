@@ -108,9 +108,9 @@ export const getBookingDetails = catchAsyncError(
   async (request: NextRequest, { params }: { params: { id: string } }) => {
     const { id } = params;
 
-    const booking = await Booking.findById(id);
-
-    if (request.user._id !== booking.user) {
+    const booking = await Booking.findById(id).populate("user room");
+    console.log("Bookheyy", { booking });
+    if (request.user._id !== booking.user._id.toString()) {
       throw new ErrorHandler("You can't view this booking", 403);
     }
 
