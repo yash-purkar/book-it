@@ -746,3 +746,14 @@ and at the end we'll return
 }
 
 WE'VE REMOVED NO-CACHE, IT WON'T GOING TO WORK IF WE USER COOKIES FETCH REQUESTS ARE NOT CACHED IF - THE FETCH REQUEST COMES AFTER THE USAGE OF HEADERS OR COOKIES.
+
+
+//BOOKING DETAILS PAGE 
+Get the booking in BookingDetailsPage and pass that to BookingDetailsComponent.
+And display booking details there.
+
+Now we are getting only user id in user of booking but we want the user details to display here so in getBookingDetails controller we'll populate('user')
+when we find the booking
+And also we want room details so we'll pupulate that as well.
+populate('user room');
+And show there in booking details page.
