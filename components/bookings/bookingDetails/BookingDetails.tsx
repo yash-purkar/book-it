@@ -11,7 +11,7 @@ interface BookingDetailsProps {
 export const BookingDetails = ({ data }: BookingDetailsProps) => {
   const { booking } = data;
 
-  const isPaid = booking.paymentInfo.status === "paid" ? true : false;
+  const isPaid = booking.paymentInfo.status === "PAID" ? true : false;
 
   return (
     <div className="container">

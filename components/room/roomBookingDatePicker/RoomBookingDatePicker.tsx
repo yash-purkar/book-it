@@ -10,7 +10,9 @@ import {
   useNewBookingMutation,
 } from "@/redux/api/bookingApi";
 import { calculateDaysOfStay } from "@/helpers/helpers";
-
+import { useAppSelector } from "@/redux/hooks";
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 interface RoomBookingDatePickerProps {
   room: IRoom;
 }
@@ -20,20 +22,31 @@ export const RoomBookingDatePicker = ({ room }: RoomBookingDatePickerProps) => {
   const [checkoutDate, setCheckoutDate] = useState<Date | null>(null);
   const [daysOfStay, setDaysOfStay] = useState<number>(0);
 
-  const [newBooking] = useNewBookingMutation();
+  const [newBooking,{isSuccess,isError,isLoading}] = useNewBookingMutation();
 
   const [checkBookingAvailability, { data }] =
     useLazyCheckBookingAvailabilityQuery();
 
+  const { isAuthenticated,user } = useAppSelector((state) => state.auth);
+
   const { data: { bookedDates = [] } = {} } = useGetRoomBookedDatesQuery({
     id: room._id,
   });
+  
+  const router = useRouter();
+  useEffect(() => {
+    if(isSuccess){
+      toast.success("Room Booked Succesffully");
+      router.push(`${process.env.NEXT_PUBLIC_API_URL}/bookings/me`)
+    } else if(isError) {
+      toast.error("Failed to book room.")
+    }
+  },[isSuccess,isError])
 
   // Converting string dates into Date format.
   const datesNeedToBeDisabled =
     bookedDates.map((date: string) => new Date(date)) || [];
 
-  console.log({ bookedDates, datesNeedToBeDisabled });
   const isAvailable = data?.isAvailable;
 
   const handleDateChange = (dates: Date[]) => {
@@ -54,19 +67,52 @@ export const RoomBookingDatePicker = ({ room }: RoomBookingDatePickerProps) => {
   };
 
   const handleClick = () => {
+    const amountToBePaid = daysOfStay * room.pricePerNight;
     const newBookingPayload = {
       room: room._id,
       checkInDate,
       checkoutDate,
       daysOfStay,
-      amountPaid: daysOfStay * room.pricePerNight,
+      amountPaid: amountToBePaid,
       paymentInfo: {
         id: "STRIPE_DUMMY_ID",
         status: "PAID",
       },
     };
-    newBooking(newBookingPayload);
+
+    var options = {
+      key: process.env.NEXT_PUBLIC_RAZORPAY_KEY,
+      key_secret: process.env.NEXT_PUBLIC_RAZORPAY_SECRET_KEY,
+      amount: amountToBePaid,
+      currency: "USD",
+      name: "Book-IT",
+      description: "Pay to book the room.",
+      handler: function (response: any) {
+        newBooking(newBookingPayload);
+        localStorage.setItem(
+          "bookit_payment_id",
+          response?.razorpay_payment_id
+        );
+      },
+      prefill: {
+        name: user.name,
+        email: user.email,
+      },
+      notes: {
+        address: "Book IT, Noida Sector 63",
+      },
+      theme: {
+        color: "#e61e4d",
+      },
+    };
+
+    // @ts-ignore
+    var pay = new window.Razorpay(options);
+    pay.open();
   };
+
+  // If dates are not selected btn will be disabled.
+  const isButtonDisabled = !isLoading && checkInDate && checkoutDate ? false : true;
 
   return (
     <div className={`${styles["booking-card"]} shadow p-4`}>
@@ -98,12 +144,19 @@ export const RoomBookingDatePicker = ({ room }: RoomBookingDatePickerProps) => {
           )}
         </>
       )}
-      <button
-        onClick={handleClick}
-        className={`btn ${styles["form-btn"]} py-3 w-100`}
-      >
-        Pay
-      </button>
+
+      {!isAuthenticated && checkInDate && checkoutDate && (
+        <div className="alert alert-danger my-3">Login to book the room!</div>
+      )}
+      {isAuthenticated && checkInDate && checkoutDate && (
+        <button
+          onClick={handleClick}
+          className={`btn ${styles["form-btn"]} py-3 w-100`}
+          disabled={isButtonDisabled}
+        >
+          Pay
+        </button>
+      )}
       {/* <!-- Booking success/error messages go here --> */}
     </div>
   );

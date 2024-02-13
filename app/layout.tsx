@@ -33,6 +33,7 @@ export default function RootLayout({
 
         <Script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></Script>
         <Script src="https://kit.fontawesome.com/6dca93c62b.js"></Script>
+        <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
       </body>
     </html>
   );
