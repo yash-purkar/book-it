@@ -4,6 +4,7 @@ import Booking, { IBooking } from "../models/booking";
 import moment from "moment";
 import { extendMoment } from "moment-range";
 import ErrorHandler from "../utils/errorHandler";
+import Room, { IReview, IRoom } from "../models/room";
 
 const momentRange = extendMoment(moment);
 
@@ -109,7 +110,7 @@ export const getBookingDetails = catchAsyncError(
     const { id } = params;
 
     const booking = await Booking.findById(id).populate("user room");
-    console.log("Bookheyy", { booking });
+
     if (request.user._id !== booking.user._id.toString()) {
       throw new ErrorHandler("You can't view this booking", 403);
     }
@@ -119,3 +120,39 @@ export const getBookingDetails = catchAsyncError(
     });
   }
 );
+
+// Create and update room review -> /api/rooms/review
+export const addReview = catchAsyncError(async (request: NextRequest) => {
+  const body = await request.json();
+  const { rating, comment, roomId } = body;
+
+  const review = {
+    user: request.user._id,
+    rating: Number(rating),
+    comment,
+  };
+
+  // getting room
+  const room = await Room.findById(roomId);
+
+  // Checking is user already has given review or not.
+  const isAlreadyReviewed = room?.reviews.find(
+    (review: IReview) => review.user.toString() === request.user._id.toString()
+  );
+
+  //If user already has given review we'll update that.
+  if (isAlreadyReviewed) {
+    room?.reviews.forEach((review: IReview) => {
+      if (review.user.toString() === request.user._id.toString()) {
+        review.comment = comment;
+        review.rating = Number(rating);
+      }
+    });
+  } else {
+    room?.reviews.push(review);
+  }
+
+  await room.save();
+
+  return NextResponse.json({ isSuccess: true, room });
+});

@@ -757,3 +757,57 @@ when we find the booking
 And also we want room details so we'll pupulate that as well.
 populate('user room');
 And show there in booking details page.
+
+
+//BOOKING INVOICE
+1st create component Invoice and then create page for this in app and call this component there, fetch the room details there in page and pass it to this component.
+
+Populate it with all the values.
+
+To download the invoice we'll use 2 packages
+html2canvas - It allows us to take a screenshot of a webpage. So we'll take the screenshot of the div of invoice by selecting it by id.
+
+jsPDF - Once we got the screenshot using html2canvas we'll convert that to pdf using this and then save it in the system.
+
+1st we'll get that div whose screenshot we wanna take.
+const elementToBeCaptured = document.getElementById('booking_invoice');
+
+then we'll call the html2canvas fn and that will return the promise with the screenshot.
+Then we've used .toDaaURL('image/png')
+So it returns the content of the current canvas image and we pass the type we want.
+to tell type of img.
+
+Now we've to add the image in pdf
+so we'll create the instance of jsPDF()
+const pdf = new jsPDF();
+now we want to specify the width of the pdf so
+const pdfWidth = pdf.internal.pageSize.getWidth();
+so we'll get the width of the pdf
+And now we have to add that image in pdf.
+so 
+pdf.addImage(imageDate,0,0,pdfWidth,0);
+And then we want to save that in machine 
+so 
+pdf.save('invoice_${booking._id}.pdf')
+
+add image takes - addImage(imageData, format, x, y, width, height, alias, compression, rotation)
+
+Blog on jspdf
+https://www.michaelmarino.dev/blog/jspdf/
+https://artskydj.github.io/jsPDF/docs/module-addImage.html
+
+
+// PAYMENT INTEGRATION
+USE RAZORPAY DUMMY PAYMENT INTEGRATION
+We can't use env variables in client side component, otherwise our sensitive information might be leak, like api keys and etc, 
+But if we have something that is not sensitive but we want to store that in env and want to use that on client component then we can define like this 
+NEXT_PUBLIC_RAZORPAY_KEY="KEY"
+
+
+//ADD ROOM REVIEW
+1st get the rating comment and roomId from the body 
+create a review object 
+find that room in db.
+check is user has already given review on that room if yes then update the previous review with new one.
+If not add this in review.
+and then save the room.

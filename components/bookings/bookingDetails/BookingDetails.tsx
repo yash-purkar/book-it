@@ -10,8 +10,8 @@ interface BookingDetailsProps {
 
 export const BookingDetails = ({ data }: BookingDetailsProps) => {
   const { booking } = data;
-console.log({data})
-  const isPaid = booking.paymentInfo.status === "paid" ? true : false;
+
+  const isPaid = booking.paymentInfo.status === "PAID" ? true : false;
 
   return (
     <div className="container">
@@ -90,23 +90,22 @@ console.log({data})
             <div className="row my-5">
               <div className="col-4 col-lg-2">
                 <img
-                  src="room-image-url.jpg"
-                  alt="Room Name"
+                  src={`${booking.room.images[0].url}`}
+                  alt={"IMG"}
                   height="45"
                   width="65"
                 />
               </div>
-
               <div className="col-5 col-lg-5">
-                <a href="/room/room-id">Room Name</a>
+                <a href={`/rooms/${booking.room._id}`}>{booking.room.name}</a>
               </div>
 
               <div className="col-4 col-lg-2 mt-4 mt-lg-0">
-                <p>$100.00</p>
+                <p>${booking.room.pricePerNight}</p>
               </div>
 
               <div className="col-4 col-lg-3 mt-4 mt-lg-0">
-                <p>{booking.daysOfStay} Day(s)</p>
+                <p>{booking.daysOfStay} Day's</p>
               </div>
             </div>
           </div>

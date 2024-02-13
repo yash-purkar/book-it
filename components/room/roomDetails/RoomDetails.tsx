@@ -15,8 +15,9 @@ interface RoomDetailsProps {
   };
 }
 
-export const RoomDetails = ({ data }: RoomDetailsProps) => {
+export const RoomDetails = ({ data}: RoomDetailsProps) => {
   const { room } = data;
+
   return (
     <>
       <div className="container container-fluid">
@@ -48,7 +49,7 @@ export const RoomDetails = ({ data }: RoomDetailsProps) => {
           </div>
 
           <div className="col-12 col-md-6 col-lg-4">
-            <RoomBookingDatePicker room={room} />
+            <RoomBookingDatePicker room={room}/>
 
             {/* Room Location Map */}
           </div>
