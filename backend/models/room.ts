@@ -17,7 +17,7 @@ export interface IImage {
   url: string;
 }
 
-interface IReviews {
+export interface IReview {
   user: ObjectId;
   rating: number;
   comment: string;
@@ -40,7 +40,7 @@ export interface IRoom extends Document{
   isRoomCleaning: boolean;
   ratings: number;
   numOfReviews: number;
-  reviews: IReviews[];
+  reviews: IReview[];
   user: ObjectId;
   createdAt: Date;
 }

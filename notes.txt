@@ -802,3 +802,12 @@ USE RAZORPAY DUMMY PAYMENT INTEGRATION
 We can't use env variables in client side component, otherwise our sensitive information might be leak, like api keys and etc, 
 But if we have something that is not sensitive but we want to store that in env and want to use that on client component then we can define like this 
 NEXT_PUBLIC_RAZORPAY_KEY="KEY"
+
+
+//ADD ROOM REVIEW
+1st get the rating comment and roomId from the body 
+create a review object 
+find that room in db.
+check is user has already given review on that room if yes then update the previous review with new one.
+If not add this in review.
+and then save the room.
