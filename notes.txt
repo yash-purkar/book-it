@@ -810,4 +810,31 @@ create a review object
 find that room in db.
 check is user has already given review on that room if yes then update the previous review with new one.
 If not add this in review.
+We also want to get the average of reviews rating to display on frontend.
 and then save the room.
+
+
+//ADD REVIEW FROM FRONTEND
+
+1st create a mutation and in redux store
+have a states for review comment and rating in review modal
+
+
+//DISPLAY ALL reviews
+display reviews on frontend get this from backend
+
+
+//If USER HAS NOT BOOK PARTICULAR ROOM USER CAN'T ADD REVIEW ON THAT ROOM.
+
+create new controller for the same
+In that we'll get the roomId from the query.
+And userId from the request and we'll check in booking
+if there is any booking with this user id and room
+if yes then we we'll allow user to give the review.
+
+Then create endpoint 
+
+Then create query in redux
+
+and call this in newReviewModal.
+

@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
-import Room, { IRoom } from "@/backend/models/room";
+import Room, { IReview, IRoom } from "@/backend/models/room";
 import ErrorHandler from "../utils/errorHandler";
 import { catchAsyncError } from "../middlewares/catchAsyncError";
 import APIFilters from "../utils/apiFilters";
+import Booking from "../models/booking";
 
 // get all rooms  - api/rooms
 export const getAllRooms = catchAsyncError(async (request: NextRequest) => {
@@ -30,7 +31,7 @@ export const getAllRooms = catchAsyncError(async (request: NextRequest) => {
 
   let rooms: IRoom[] = await apiFilters.query;
 
-// Will need this on frontend.
+  // Will need this on frontend.
   const filteredRoomsCount: number = rooms.length;
 
   apiFilters.pagination(resultsPerPage);
@@ -62,8 +63,7 @@ export const addNewRoom = catchAsyncError(async (request: NextRequest) => {
 // Get room details -> /api/rooms/:id
 export const getRoomDetails = catchAsyncError(
   async (request: NextRequest, { params }: { params: { id: string } }) => {
-    console.log(params, "d");
-    const room = await Room.findById(params.id);
+    const room = await Room.findById(params.id).populate("reviews.user");
     if (!room) {
       throw new ErrorHandler("Room not found", 404);
     }
@@ -105,3 +105,60 @@ export const deleteRoom = catchAsyncError(
     });
   }
 );
+
+// Create and update room review -> /api/rooms/review
+export const addReview = catchAsyncError(async (request: NextRequest) => {
+  const body = await request.json();
+  const { rating, comment, roomId } = body;
+
+  const review = {
+    user: request.user._id,
+    rating: Number(rating),
+    comment,
+  };
+
+  // getting room
+  const room = await Room.findById(roomId);
+
+  // Checking is user already has given review or not.
+  const isAlreadyReviewed = room?.reviews.find(
+    (review: IReview) => review.user.toString() === request.user._id.toString()
+  );
+
+  //If user already has given review we'll update that.
+  if (isAlreadyReviewed) {
+    room?.reviews.forEach((review: IReview) => {
+      if (review.user.toString() === request.user._id.toString()) {
+        review.comment = comment;
+        review.rating = Number(rating);
+      }
+    });
+  } else {
+    room?.reviews.push(review);
+    room.numOfReviews = room.reviews.length;
+  }
+
+  // Calculating average of rating
+  room.raging =
+    room.reviews.reduce((acc: number, curr: IReview) => acc + curr.rating, 0) /
+    room.reviews.length;
+
+  await room.save();
+
+  return NextResponse.json({ isSuccess: true, room });
+});
+
+// Can user add review -> /api/rooms/review/can_add_review
+
+export const canAddReview = catchAsyncError(async (request: NextRequest) => {
+  const { searchParams } = new URL(request.url);
+  const roomId = searchParams.get("roomId");
+
+  // If there is a booking in this room of this user.
+  const bookings = await Booking.find({ room: roomId, user: request.user._id });
+  const canGiveReview = bookings.length > 0 ? true : false;
+
+  return NextResponse.json({
+    canAddReview: canGiveReview,
+  });
+});
