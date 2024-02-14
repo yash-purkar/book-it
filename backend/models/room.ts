@@ -1,4 +1,5 @@
 import mongoose, { ObjectId, Schema,Document } from "mongoose";
+import { IUser } from "./user";
 
 interface ILocation {
   type: string;
@@ -18,7 +19,7 @@ export interface IImage {
 }
 
 export interface IReview {
-  user: ObjectId;
+  user: IUser;
   rating: number;
   comment: string;
 }
@@ -41,7 +42,7 @@ export interface IRoom extends Document{
   ratings: number;
   numOfReviews: number;
   reviews: IReview[];
-  user: ObjectId;
+  user: IUser;
   createdAt: Date;
 }
 

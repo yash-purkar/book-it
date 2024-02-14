@@ -53,9 +53,8 @@ export const RoomDetails = ({ data}: RoomDetailsProps) => {
         </div>
 
         <NewReviewModal data={{roomId:room._id}} />
-        
 
-        <ListReviews />
+        <ListReviews reviews={room.reviews} />
       </div>
     </>
   );

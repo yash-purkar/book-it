@@ -5,13 +5,14 @@ import styles from "./newReviewModal.module.css";
 import StarRatings from "react-star-ratings";
 import { useAddReviewMutation } from "@/redux/api/roomApi";
 import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 export const NewReviewModal = ({ data }: { data: { roomId: string } }) => {
   const [rating, setRating] = useState<number>(0);
   const [comment, setComment] = useState<string>("");
 
-  const [addReview, { isError, isSuccess, error }] = useAddReviewMutation();
-
+  const [addReview, { isError, isSuccess }] = useAddReviewMutation();
+const router = useRouter();
   useEffect(() => {
     if (isError) {
       toast.error("Failed to add review");
@@ -19,6 +20,7 @@ export const NewReviewModal = ({ data }: { data: { roomId: string } }) => {
 
     if (isSuccess) {
       toast.success("Review Added");
+      router.refresh();   
     }
   }, [isSuccess, isError]);
 

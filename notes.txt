@@ -818,3 +818,7 @@ and then save the room.
 
 1st create a mutation and in redux store
 have a states for review comment and rating in review modal
+
+
+//DISPLAY ALL reviews
+display reviews on frontend get this from backend

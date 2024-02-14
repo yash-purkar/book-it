@@ -9,7 +9,7 @@ interface RoomDetailsProps {
 }
 
 const getRoomDetails = async (id: string) => {
-  const response = await fetch(`${process.env.API_URL}/api/rooms/${id}`);
+  const response = await fetch(`${process.env.API_URL}/api/rooms/${id}`,{cache:'no-store'});
   return await response.json();
 };
 
