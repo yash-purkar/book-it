@@ -810,4 +810,5 @@ create a review object
 find that room in db.
 check is user has already given review on that room if yes then update the previous review with new one.
 If not add this in review.
+We also want to get the average of reviews rating to display on frontend.
 and then save the room.

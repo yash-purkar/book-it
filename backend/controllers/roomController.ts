@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import Room, { IRoom } from "@/backend/models/room";
+import Room, { IReview, IRoom } from "@/backend/models/room";
 import ErrorHandler from "../utils/errorHandler";
 import { catchAsyncError } from "../middlewares/catchAsyncError";
 import APIFilters from "../utils/apiFilters";
@@ -30,7 +30,7 @@ export const getAllRooms = catchAsyncError(async (request: NextRequest) => {
 
   let rooms: IRoom[] = await apiFilters.query;
 
-// Will need this on frontend.
+  // Will need this on frontend.
   const filteredRoomsCount: number = rooms.length;
 
   apiFilters.pagination(resultsPerPage);
@@ -105,3 +105,45 @@ export const deleteRoom = catchAsyncError(
     });
   }
 );
+
+// Create and update room review -> /api/rooms/review
+export const addReview = catchAsyncError(async (request: NextRequest) => {
+  const body = await request.json();
+  const { rating, comment, roomId } = body;
+
+  const review = {
+    user: request.user._id,
+    rating: Number(rating),
+    comment,
+  };
+
+  // getting room
+  const room = await Room.findById(roomId);
+
+  // Checking is user already has given review or not.
+  const isAlreadyReviewed = room?.reviews.find(
+    (review: IReview) => review.user.toString() === request.user._id.toString()
+  );
+
+  //If user already has given review we'll update that.
+  if (isAlreadyReviewed) {
+    room?.reviews.forEach((review: IReview) => {
+      if (review.user.toString() === request.user._id.toString()) {
+        review.comment = comment;
+        review.rating = Number(rating);
+      }
+    });
+  } else {
+    room?.reviews.push(review);
+    room.numOfReviews = room.reviews.length;
+  }
+
+  // Calculating average of rating
+  room.raging =
+    room.reviews.reduce((acc: number, curr: IReview) => acc + curr.rating, 0) /
+    room.reviews.length;
+
+  await room.save();
+
+  return NextResponse.json({ isSuccess: true, room });
+});
