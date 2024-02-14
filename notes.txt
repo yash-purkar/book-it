@@ -822,3 +822,19 @@ have a states for review comment and rating in review modal
 
 //DISPLAY ALL reviews
 display reviews on frontend get this from backend
+
+
+//If USER HAS NOT BOOK PARTICULAR ROOM USER CAN'T ADD REVIEW ON THAT ROOM.
+
+create new controller for the same
+In that we'll get the roomId from the query.
+And userId from the request and we'll check in booking
+if there is any booking with this user id and room
+if yes then we we'll allow user to give the review.
+
+Then create endpoint 
+
+Then create query in redux
+
+and call this in newReviewModal.
+

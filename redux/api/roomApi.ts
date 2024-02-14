@@ -15,7 +15,14 @@ export const roomApi = createApi({
         };
       },
     }),
+    canAddReview: builder.query({
+      query({ roomId }) {
+        return {
+          url: `/rooms/review/can_add_review?roomId=${roomId}`,
+        };
+      },
+    }),
   }),
 });
 
-export const { useAddReviewMutation } = roomApi;
+export const { useAddReviewMutation, useCanAddReviewQuery } = roomApi;

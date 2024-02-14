@@ -3,7 +3,10 @@
 import React, { useEffect, useState } from "react";
 import styles from "./newReviewModal.module.css";
 import StarRatings from "react-star-ratings";
-import { useAddReviewMutation } from "@/redux/api/roomApi";
+import {
+  useAddReviewMutation,
+  useCanAddReviewQuery,
+} from "@/redux/api/roomApi";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 
@@ -12,7 +15,11 @@ export const NewReviewModal = ({ data }: { data: { roomId: string } }) => {
   const [comment, setComment] = useState<string>("");
 
   const [addReview, { isError, isSuccess }] = useAddReviewMutation();
-const router = useRouter();
+  const {
+    data:{canAddReview} = {},
+  } = useCanAddReviewQuery({ roomId: data.roomId });
+  const router = useRouter();
+
   useEffect(() => {
     if (isError) {
       toast.error("Failed to add review");
@@ -20,7 +27,7 @@ const router = useRouter();
 
     if (isSuccess) {
       toast.success("Review Added");
-      router.refresh();   
+      router.refresh();
     }
   }, [isSuccess, isError]);
 
@@ -35,14 +42,16 @@ const router = useRouter();
 
   return (
     <>
-      <button
-        type="button"
-        className={`btn ${styles["form-btn"]} mt-4 mb-5`}
-        data-bs-toggle="modal"
-        data-bs-target="#ratingModal"
-      >
-        Submit Your Review
-      </button>
+      {canAddReview && (
+        <button
+          type="button"
+          className={`btn ${styles["form-btn"]} mt-4 mb-5`}
+          data-bs-toggle="modal"
+          data-bs-target="#ratingModal"
+        >
+          Submit Your Review
+        </button>
+      )}
       <div
         className="modal fade"
         id="ratingModal"
