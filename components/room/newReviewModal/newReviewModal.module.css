@@ -17,3 +17,15 @@
   border-color: #bb2d3b;
   color: white;
 }
+
+ .reviewInput{
+  resize: none;
+  width: 100%;
+  border: 1px solid lightgray;
+  padding: 1rem;
+  letter-spacing: 1px;
+}
+
+.reviewInput:focus {
+  border: 1px solid lightgrey;
+}

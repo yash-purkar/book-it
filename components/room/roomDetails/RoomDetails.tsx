@@ -1,7 +1,6 @@
 "use client";
 
 import { IRoom } from "@/backend/models/room";
-import Image from "next/image";
 import React from "react";
 import StarRatings from "react-star-ratings";
 import { RoomImageSlider } from "../RoomImageSlider/RoomImageSlider";
@@ -53,7 +52,8 @@ export const RoomDetails = ({ data}: RoomDetailsProps) => {
           </div>
         </div>
 
-        <NewReviewModal />
+        <NewReviewModal data={{roomId:room._id}} />
+        
 
         <ListReviews />
       </div>

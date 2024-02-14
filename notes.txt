@@ -812,3 +812,9 @@ check is user has already given review on that room if yes then update the previ
 If not add this in review.
 We also want to get the average of reviews rating to display on frontend.
 and then save the room.
+
+
+//ADD REVIEW FROM FRONTEND
+
+1st create a mutation and in redux store
+have a states for review comment and rating in review modal
