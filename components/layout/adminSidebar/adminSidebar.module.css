@@ -1,0 +1,17 @@
+.list-group-item:first-child {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+  }
+  
+  .list-group-item {
+    border: none;
+    margin-bottom: 1rem;
+  }
+  
+  .list-group-item.active {
+    background-color: #f3f4f6;
+    border-color: #f3f4f6;
+    border-radius: 0.3rem;
+    color: #e61e4d;
+  }
+  

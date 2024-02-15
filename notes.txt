@@ -838,3 +838,7 @@ Then create query in redux
 
 and call this in newReviewModal.
 
+//ADMIN ROUTES
+//Create admin SIDEBAR like user sidebar but admin will have some more access.
+Create layout in admin like we've in me
+
