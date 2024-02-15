@@ -867,3 +867,12 @@ so
 authorized: ({ token }) => !!token,
 It will check is token there if yes return true and if not return false.
 And also added in matcher.
+
+
+DISPLAY CONTENT ON DASHBOARD
+There we'll give the option to select start date and end date and fetch the sales between this days and display.
+1st add date pickers to select the dates.
+2nd add the container to show the data.
+Then we'll show 2 charts 
+1. To show the sales of 6 months.
+2. To show top performing rooms
