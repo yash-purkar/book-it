@@ -19,9 +19,7 @@ interface RequestContext {}
 const router = createEdgeRouter<NextRequest, RequestContext>();
 connectToDB();
 
-// This is just for checking how we can use this middleware I'll remove this after this commit
-router.use(isAuthenticated,authorizeRoles('admin')).get(getAllRooms);
-// router.get(getAllRooms)
+router.get(getAllRooms)
 
 // It will call for all GET requests on this route.
 export async function GET(request: NextRequest, ctx: RequestContext) {

@@ -857,3 +857,13 @@ User should be authenticated 1st, bcz there we are setting the user in request.
 check this like 
 localhost:3000/api/rooms
 This check is only for backend route.
+
+//ADMIN MIDDLEWARE ON FRONTEND
+in middleware.ts
+we'll check if url starts with '/admin' and current user role is not the admin we'll redirect user to '/'
+
+Then we'll use callbacks to check is user authorized or not
+so 
+authorized: ({ token }) => !!token,
+It will check is token there if yes return true and if not return false.
+And also added in matcher.
