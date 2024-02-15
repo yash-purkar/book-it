@@ -16,7 +16,18 @@ export const isAuthenticated = async (
       { status: 401 }
     );
   }
-
   req.user = session.user as IUser;
   return next();
+};
+
+// Only admin can access admin routes
+export const authorizeRoles = (...roles: string[]) => {
+  return (request: NextRequest, event: any, next: any) => {
+    if (!roles.includes(request.user.role)) {
+      return NextResponse.json({
+        errorMessage: `Role (${request.user.role}) can not acces this route.`,
+      },{status:403});
+    }
+    return next();
+  };
 };

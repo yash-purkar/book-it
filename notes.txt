@@ -838,3 +838,41 @@ Then create query in redux
 
 and call this in newReviewModal.
 
+//ADMIN ROUTES
+//Create admin SIDEBAR like user sidebar but admin will have some more access.
+Create layout in admin like we've in me
+
+
+//PROTECT ROUTES 
+IF USER IS NOT ADMIN HE CAN'T ACCESS ADMIN ROUTES ON BACKEND AND ON FRONTEND
+
+1st on backend
+In backend we've middleware files there we'll create new middleware.
+We are taking the roles who can access the route and checking if the current user role is include in that or not if yes then next() to go ahead otherwise return errorMessage.
+
+to use this we've to do.
+router.use(isAuthenticated,authorizeRoles("admin")).get ....
+In this case only admin can access this api endpoint.
+User should be authenticated 1st, bcz there we are setting the user in request.
+check this like 
+localhost:3000/api/rooms
+This check is only for backend route.
+
+//ADMIN MIDDLEWARE ON FRONTEND
+in middleware.ts
+we'll check if url starts with '/admin' and current user role is not the admin we'll redirect user to '/'
+
+Then we'll use callbacks to check is user authorized or not
+so 
+authorized: ({ token }) => !!token,
+It will check is token there if yes return true and if not return false.
+And also added in matcher.
+
+
+DISPLAY CONTENT ON DASHBOARD
+There we'll give the option to select start date and end date and fetch the sales between this days and display.
+1st add date pickers to select the dates.
+2nd add the container to show the data.
+Then we'll show 2 charts 
+1. To show the sales of 6 months.
+2. To show top performing rooms
