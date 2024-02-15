@@ -842,3 +842,18 @@ and call this in newReviewModal.
 //Create admin SIDEBAR like user sidebar but admin will have some more access.
 Create layout in admin like we've in me
 
+
+//PROTECT ROUTES 
+IF USER IS NOT ADMIN HE CAN'T ACCESS ADMIN ROUTES ON BACKEND AND ON FRONTEND
+
+1st on backend
+In backend we've middleware files there we'll create new middleware.
+We are taking the roles who can access the route and checking if the current user role is include in that or not if yes then next() to go ahead otherwise return errorMessage.
+
+to use this we've to do.
+router.use(isAuthenticated,authorizeRoles("admin")).get ....
+In this case only admin can access this api endpoint.
+User should be authenticated 1st, bcz there we are setting the user in request.
+check this like 
+localhost:3000/api/rooms
+This check is only for backend route.
