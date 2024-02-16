@@ -1014,3 +1014,87 @@ Now in chart in
 for labels we'll show the months 
 so we'll map over the salesdata there and return the month everytime.
 And for the amount and booking pass it like months.
+
+
+//SHOWING TOP PERFORMING 3 ROOMS BETWEEN GIVEN DATES 
+In booking controller we'll create a function which will return us the top performing rooms between the given start and end date.
+
+const getTopPerformingRooms = async(startDate:Date,endDate:Date) => {
+  const topRooms = await Booking.aggregate([
+    {
+      //1st stage - will filter out the bookings between given dates.
+
+    $match:{
+      createdAt: {
+        $gte:startDate,
+        $lte:endDate
+      }
+    },
+
+    //2nd stage - we'll group the bookings with the roomId , it will do like this room has 5 bookings.
+
+    $group:{
+    _id:"$room" // key in booking collection,
+    bookingsCount: 1 //It is like counter, accmulator
+    },
+
+    //3rd stage - we'll sort the bookings in descending order
+
+    $sort:{
+      bookingCount: -1 // count will be count of all bookings
+    },
+
+    4th stage - We'll get only top 3.
+    {$limit : 3},
+
+    //5th stage - We've room id in _id in 2nd stage.
+    so We want the name of that room so we've to get it from the Rooms collection.
+
+    {
+      $lookup : {
+        from: 'rooms', //from where we wanna get.
+        localField: "_id", on what basis we wanna get,
+        foreignField: "_id", on what basis we want to see in rooms collection.
+        as : "roomData" // name for the data
+      }
+    },
+
+    //6th stage - we'll get the array of documents we want to split them here.
+     {
+      $unwind: 'roomData'
+     },
+
+     //7th stage - Which fileds we want 
+
+     {
+      $project : {
+        _id: 0, // don't want,
+        roomName: 'roomData.name',
+        bookingCount: 1, Include (want)
+      }
+     }
+    }
+  ])
+
+  and then return the topRooms;
+
+}
+
+
+Now we'll call this function in roomsController
+
+and return the response, so we'll get that in dashboard.
+
+frontend
+In dashboard we'll get this data so we'll pass it to the chart but we'll add check there if topRooms.length ===0 display not found text otherewise display chart.
+
+now in chart change the labels with the room names using map.
+
+And change the data with bookingsCount.
+
+IF 5 USERS HAS BOOKED ROOM A
+3 HAS BOOKED B
+2 HAS BOOKED C
+
+SO THE A WILL TAKE MORE SPACE THATN B AND C
+AND B WILL TAKE MORE SPACE THATN C

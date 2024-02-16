@@ -167,12 +167,68 @@ const getLastSixMonthsSales = async () => {
     await fetchSalesOfSingleMonth(startDateOfMonth, endDateOfMonth);
 
     // subtract by one month to go to the previous one.
-    currentDate.subtract(1,'months')
+    currentDate.subtract(1, "months");
   }
 
   return lastSixMonthsSalesData;
 };
 
+// Top performing rooms
+const getTopPerformingRooms = async (startDate: Date, endDate: Date) => {
+  const topRooms = await Booking.aggregate([
+    {
+      // stage1: Filtering bookings
+      $match: {
+        createdAt: {
+          $gte: startDate,
+          $lte: endDate,
+        },
+      },
+    },
+    {
+      // stage2: Group bookings with roomID
+      $group: {
+        _id: "$room",
+        bookingsCount: { $sum: 1 },
+      },
+    },
+    {
+      // stage3: Sort in descending order
+      $sort: {
+        bookingsCount: -1,
+      },
+    },
+    {
+      // stage4: limit top 3 bookings.
+      $limit: 3,
+    },
+    {
+      // stage5: to get more data from the room collection
+      $lookup: {
+        from: "rooms",
+        localField: "_id",
+        foreignField: "_id",
+        as: "roomData",
+      },
+    },
+    {
+      // stage6: to split the documents array
+      $unwind: "$roomData",
+    },
+    {
+      // stage7: to choose which data we want
+      $project: {
+        _id: 0,
+        roomName: "$roomData.name",
+        bookingsCount: 1,
+      },
+    },
+  ]);
+
+  return topRooms;
+};
+
+// Get sales stats - /api/admin/sales_stats
 export const getSalesStats = catchAsyncError(async (request: NextRequest) => {
   const { searchParams } = new URL(request.url);
   // Getting startDate and endDate
@@ -200,13 +256,14 @@ export const getSalesStats = catchAsyncError(async (request: NextRequest) => {
     (acc, currElem) => acc + currElem.amountPaid,
     0
   );
-  
 
   const lastSixMonthsSalesData = await getLastSixMonthsSales();
+  const topRooms = await getTopPerformingRooms(startDate, endDate);
 
   return NextResponse.json({
     bookingsCount,
     totalSales,
-    lastSixMonthsSalesData
+    lastSixMonthsSalesData,
+    topRooms,
   });
 });

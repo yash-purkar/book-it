@@ -8,6 +8,7 @@ import { SalesChart } from "../salesChart/SalesChart";
 import { DoughnutChart } from "../doughnutChart/DoughnutChart";
 import { useLazyGetSalesStatsQuery } from "@/redux/api/bookingApi";
 import toast from "react-hot-toast";
+import Loading from "@/app/loading";
 
 export const Dashboard = () => {
   const [startDate, setStartDate] = useState(new Date());
@@ -39,7 +40,8 @@ export const Dashboard = () => {
     getSalesStats(payload);
   };
 
-  console.log({ error, data });
+if(!data) return <Loading />
+
   return (
     <div className="ps-4 my-5">
       <div className="d-flex justify-content-center align-items-center">
@@ -85,7 +87,7 @@ export const Dashboard = () => {
 
         <div className="col-12 col-lg-4 text-center">
           <h4 className="my-5">Top Performing Rooms</h4>
-          <DoughnutChart />
+          {data?.topRooms.length == 0 ? <p>No Data Found</p>:<DoughnutChart topRooms={data?.topRooms}/>}
         </div>
       </div>
     </div>
