@@ -119,3 +119,151 @@ export const getBookingDetails = catchAsyncError(
     });
   }
 );
+
+//It will give last 6 months sales and bookings.
+const getLastSixMonthsSales = async () => {
+  const lastSixMonthsSalesData: any[] = [];
+  // Todays date.
+  const currentDate = momentRange();
+
+  async function fetchSalesOfSingleMonth(startDate: any, endDate: any) {
+    const result = await Booking.aggregate([
+      {
+        //Filtering between start and end date
+        $match: {
+          createdAt: {
+            $gte: startDate.toDate(),
+            $lte: endDate.toDate(),
+          },
+        },
+      },
+      {
+        //grouping
+        $group: {
+          _id: null,
+          // sum of amount paid
+          totalSales: { $sum: "$amountPaid" },
+          // it is like counter.
+          numberOfBookings: { $sum: 1 },
+        },
+      },
+    ]);
+
+    const { totalSales, numberOfBookings } =
+      result.length > 0 ? result[0] : { totalSales: 0, numberOfBookings: 0 };
+
+    lastSixMonthsSalesData.push({
+      month: startDate.format("MMMM"),
+      totalSales,
+      numberOfBookings,
+    });
+  }
+
+  //we want to call the fn 6 times to get the last 6 months data.
+  for (let i = 0; i < 6; i++) {
+    const startDateOfMonth = momentRange(currentDate).startOf("months");
+    const endDateOfMonth = momentRange(currentDate).endOf("months");
+
+    await fetchSalesOfSingleMonth(startDateOfMonth, endDateOfMonth);
+
+    // subtract by one month to go to the previous one.
+    currentDate.subtract(1, "months");
+  }
+
+  return lastSixMonthsSalesData;
+};
+
+// Top performing rooms
+const getTopPerformingRooms = async (startDate: Date, endDate: Date) => {
+  const topRooms = await Booking.aggregate([
+    {
+      // stage1: Filtering bookings
+      $match: {
+        createdAt: {
+          $gte: startDate,
+          $lte: endDate,
+        },
+      },
+    },
+    {
+      // stage2: Group bookings with roomID
+      $group: {
+        _id: "$room",
+        bookingsCount: { $sum: 1 },
+      },
+    },
+    {
+      // stage3: Sort in descending order
+      $sort: {
+        bookingsCount: -1,
+      },
+    },
+    {
+      // stage4: limit top 3 bookings.
+      $limit: 3,
+    },
+    {
+      // stage5: to get more data from the room collection
+      $lookup: {
+        from: "rooms",
+        localField: "_id",
+        foreignField: "_id",
+        as: "roomData",
+      },
+    },
+    {
+      // stage6: to split the documents array
+      $unwind: "$roomData",
+    },
+    {
+      // stage7: to choose which data we want
+      $project: {
+        _id: 0,
+        roomName: "$roomData.name",
+        bookingsCount: 1,
+      },
+    },
+  ]);
+
+  return topRooms;
+};
+
+// Get sales stats - /api/admin/sales_stats
+export const getSalesStats = catchAsyncError(async (request: NextRequest) => {
+  const { searchParams } = new URL(request.url);
+  // Getting startDate and endDate
+  const startDate = new Date(searchParams.get("startDate") as string);
+  const endDate = new Date(searchParams.get("endDate") as string);
+
+  // starDate's hours will start from (0h,0m,0s,0ms);
+  startDate.setHours(0, 0, 0, 0);
+
+  // endDate's hours will be till (23,59,59,999). 1ms before next day.
+  endDate.setHours(23, 59, 59, 999);
+
+  // Getting bookings between start and end date
+  const bookings = await Booking.find({
+    createdAt: {
+      $gt: startDate,
+      $lt: endDate,
+    },
+  });
+
+  const bookingsCount = bookings.length;
+
+  // Calculating total sales
+  const totalSales = bookings?.reduce(
+    (acc, currElem) => acc + currElem.amountPaid,
+    0
+  );
+
+  const lastSixMonthsSalesData = await getLastSixMonthsSales();
+  const topRooms = await getTopPerformingRooms(startDate, endDate);
+
+  return NextResponse.json({
+    bookingsCount,
+    totalSales,
+    lastSixMonthsSalesData,
+    topRooms,
+  });
+});

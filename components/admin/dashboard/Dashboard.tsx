@@ -1,14 +1,47 @@
 "use client";
-import React, { useState } from "react";
-import styles from './dashboard.module.css'
+import React, { useEffect, useState } from "react";
+import styles from "./dashboard.module.css";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { SalesStats } from "../salesStats/SalesStats";
 import { SalesChart } from "../salesChart/SalesChart";
 import { DoughnutChart } from "../doughnutChart/DoughnutChart";
+import { useLazyGetSalesStatsQuery } from "@/redux/api/bookingApi";
+import toast from "react-hot-toast";
+import Loading from "@/app/loading";
+
 export const Dashboard = () => {
-  const [startDate, setStartDate] = useState();
-  const [endDate, setEndDate] = useState();
+  const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(new Date());
+
+  const [getSalesStats, { data, error }] = useLazyGetSalesStatsQuery();
+
+  useEffect(() => {
+    if (error && "data" in error) {
+      //@ts-ignore
+      toast.error(error?.error ?? "Something we'nt wrong!");
+    }
+
+    // If will call initially to get the todays data.
+    if (startDate && endDate && !data) {
+      const payload = {
+        startDate: startDate.toISOString(),
+        endDate: endDate.toISOString(),
+      };
+      getSalesStats(payload);
+    }
+  }, [error]);
+
+  const handleFetch = () => {
+    const payload = {
+      startDate: startDate.toISOString(),
+      endDate: endDate.toISOString(),
+    };
+    getSalesStats(payload);
+  };
+
+if(!data) return <Loading />
+
   return (
     <div className="ps-4 my-5">
       <div className="d-flex justify-content-center align-items-center">
@@ -37,19 +70,24 @@ export const Dashboard = () => {
             minDate={startDate}
           />
         </div>
-      <button className={`btn ${styles['form-btn']} ms-4 mt-3`}>Fetch</button>
+        <button
+          onClick={handleFetch}
+          className={`btn ${styles["form-btn"]} ms-4 mt-3`}
+        >
+          Fetch
+        </button>
       </div>
-      <SalesStats/>     
+      <SalesStats data={data} />
 
       <div className="row">
         <div className="col-12 col-lg-8">
           <h4 className="my-5 text-center">Sales History</h4>
-          <SalesChart/>
+          <SalesChart lastSixMonthsSalesData={data?.lastSixMonthsSalesData} />
         </div>
 
         <div className="col-12 col-lg-4 text-center">
           <h4 className="my-5">Top Performing Rooms</h4>
-          <DoughnutChart/>
+          {data?.topRooms.length == 0 ? <p>No Data Found</p>:<DoughnutChart topRooms={data?.topRooms}/>}
         </div>
       </div>
     </div>

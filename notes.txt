@@ -876,3 +876,225 @@ There we'll give the option to select start date and end date and fetch the sale
 Then we'll show 2 charts 
 1. To show the sales of 6 months.
 2. To show top performing rooms
+
+
+//SHOW TOTAL SALES AND TOTAL BOOKINGS ON DASHBOARD
+we've given 2 datepickers to select the start and end date. so user will get the booking which are done in this days.
+
+1st we will create controller in bookingController getSalesStats.
+In this controller 1st we'll have to get the currentDate and endDate.
+so we'll get that from searchParams bcz we'll add that in api when we call that api in redux toolkit query.
+
+Then in controller we'll set the hours in start date and end date, because start date's hours will start from 0 0 0 0 and end dates' hours will be till 23 hrs 59 minutes to get the whole day booking.
+
+Then we'll add condition to get the bookings 
+so createdAt should be greater than start date and less than end date.
+
+Then create the router for the same.
+
+Now create the rtk query for the same. And export then lazy function.
+
+Now we'll call this lazy in dashboard and get the data there and pass this date to SalesStats.
+But initially we will display the todays bookings only.
+so we'll call that initial api in useEffect.
+!data is for bcz if data is there we don't wanna call this.
+if(startDate && endDate && !data) {
+  call that fn to get the todays data.
+}
+
+And pass this data to SalesStats to display
+
+// NOW WE WILL GET LAST 6 MONTHS SALES AND BOOKINGS TO SHOW IN THE LINECHART
+
+//We'll use MongoDB aggregation fot this.
+Aggregation operations process multiple documents and return computed result.
+so in our case it will takes multiple boooking data and give us the one.
+
+aggregate() takes the array and that array has some stages
+e.g 
+1st is filter stage.
+It filters the documents in our case bookings.
+$match
+
+2nd is group
+Ho do we want to group the documents.
+
+1st we'll create a function in bookingController for the same
+
+const getLastSixMonthsSales = async () => {
+  // It will contain the sales data of last 6 months.
+    const lastSixMonthsSales = any[];
+  
+  Now we need current date to get the last 6 months from today itself.
+
+  const currentDate = moment.Moment();
+
+  //This fn 
+  // It will take the startdate (1st day of month) and enddate last day of the month.
+
+  async function fetchSalesOfSingleMonth () {
+
+  }
+
+  // We'll have to call this function 6 times to get the sales of last 6 months.
+
+  for(let i=0;i<6;i++){
+    //start date or the day of the month.
+    const startDateOfTheMonth = moment(currentDate).startOf('month');
+
+    //end date or the day of the month.
+    const endDateOfTheMonth = moment(currentDate).endOf('month');
+
+
+    //calling the fn to get the sales of single month.
+    await fetchSalesOfSingleMonth(startDateOfTheMonth,endDateOfTheMonth);
+
+
+    Now we've to go back 1 month everytime for 6 times 
+    so we'll subtract the 1 month everytime from the currentDate.
+
+    // It will subtract one month everytime and the previous month's dates will be passed to the fetchSalesOfSingleMonth fn.
+
+    currentDate.subtract(1,'months');
+
+  }
+
+
+//write this fn before for loop
+
+in this fn we'll write aggregation
+
+async fn fetchSalesOfSingleMonth(startDate,endDate) {
+  cons result = Booking.aggregate([
+    //1st stage filter out the date. 
+    // we want the data of single month every time so we'll get the data between start date and end date.
+
+    $match : {
+      createdAt: {
+        $gte:startDate,
+        $lte: endDate
+        }
+    },
+
+    // 2nd stage Grouping.
+    We can specify on which basis we want to group.
+
+    $group : {
+      _id:null,
+      //we want to get the total sales of that month.
+      totalSales: {$sum: "$amountPaid"},
+      //we want to get the numOfBookings in that month
+      numberOfBookings: {$sum:1},
+      // so basically sum 1 is like count of bookings which we've at this stage.
+    }
+  ]);
+
+//If result is there take that otherwise make it 0;
+  const {totalSales,numberOfBookings} = result.length > 0 ? result[0] : {totalSales:0,numberOfBookings:0}
+
+  lastSixMonthsSales.push({
+    monthName:startDate.month or someting like this,
+    totalSales,
+    numberOfBookings
+  })
+}
+
+return lastSixMonthsSales;
+}
+
+Now in getSalesStats controller we'll call this fn.
+
+const lastSixMonthsSales = await getLastSixMonthsSales();
+
+and return in nextresponse.
+
+Now we'll have this data in Dashboard so we'll pass it down to the line chart, we'll use multiaxis line chart. we just need to change the options. And need to pass the axis id there.
+
+Now in chart in
+for labels we'll show the months 
+so we'll map over the salesdata there and return the month everytime.
+And for the amount and booking pass it like months.
+
+
+//SHOWING TOP PERFORMING 3 ROOMS BETWEEN GIVEN DATES 
+In booking controller we'll create a function which will return us the top performing rooms between the given start and end date.
+
+const getTopPerformingRooms = async(startDate:Date,endDate:Date) => {
+  const topRooms = await Booking.aggregate([
+    {
+      //1st stage - will filter out the bookings between given dates.
+
+    $match:{
+      createdAt: {
+        $gte:startDate,
+        $lte:endDate
+      }
+    },
+
+    //2nd stage - we'll group the bookings with the roomId , it will do like this room has 5 bookings.
+
+    $group:{
+    _id:"$room" // key in booking collection,
+    bookingsCount: 1 //It is like counter, accmulator
+    },
+
+    //3rd stage - we'll sort the bookings in descending order
+
+    $sort:{
+      bookingCount: -1 // count will be count of all bookings
+    },
+
+    4th stage - We'll get only top 3.
+    {$limit : 3},
+
+    //5th stage - We've room id in _id in 2nd stage.
+    so We want the name of that room so we've to get it from the Rooms collection.
+
+    {
+      $lookup : {
+        from: 'rooms', //from where we wanna get.
+        localField: "_id", on what basis we wanna get,
+        foreignField: "_id", on what basis we want to see in rooms collection.
+        as : "roomData" // name for the data
+      }
+    },
+
+    //6th stage - we'll get the array of documents we want to split them here.
+     {
+      $unwind: 'roomData'
+     },
+
+     //7th stage - Which fileds we want 
+
+     {
+      $project : {
+        _id: 0, // don't want,
+        roomName: 'roomData.name',
+        bookingCount: 1, Include (want)
+      }
+     }
+    }
+  ])
+
+  and then return the topRooms;
+
+}
+
+
+Now we'll call this function in roomsController
+
+and return the response, so we'll get that in dashboard.
+
+frontend
+In dashboard we'll get this data so we'll pass it to the chart but we'll add check there if topRooms.length ===0 display not found text otherewise display chart.
+
+now in chart change the labels with the room names using map.
+
+And change the data with bookingsCount.
+
+IF 5 USERS HAS BOOKED ROOM A
+3 HAS BOOKED B
+2 HAS BOOKED C
+
+SO THE A WILL TAKE MORE SPACE THATN B AND C
+AND B WILL TAKE MORE SPACE THATN C

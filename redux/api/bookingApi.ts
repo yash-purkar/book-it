@@ -23,14 +23,24 @@ export const bookingApi = createApi({
     }),
     getRoomBookedDates: builder.query({
       query({ id }) {
-        console.log({id})
         return {
           url: `/bookings/get_room_booked_dates?roomId=${id}`,
+        };
+      },
+    }),
+    getSalesStats: builder.query({
+      query({ startDate, endDate }) {
+        return {
+          url: `/admin/sales_stats?startDate=${startDate}&endDate=${endDate}`,
         };
       },
     }),
   }),
 });
 
-export const { useNewBookingMutation, useLazyCheckBookingAvailabilityQuery,useGetRoomBookedDatesQuery } =
-  bookingApi;
+export const {
+  useNewBookingMutation,
+  useLazyCheckBookingAvailabilityQuery,
+  useGetRoomBookedDatesQuery,
+  useLazyGetSalesStatsQuery
+} = bookingApi;
