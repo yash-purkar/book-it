@@ -119,3 +119,37 @@ export const getBookingDetails = catchAsyncError(
     });
   }
 );
+
+export const getSalesStats = catchAsyncError(async (request: NextRequest) => {
+  const { searchParams } = new URL(request.url);
+  // Getting startDate and endDate
+  const startDate = new Date(searchParams.get("startDate") as string);
+  const endDate = new Date(searchParams.get("endDate") as string);
+
+  // starDate's hours will start from (0h,0m,0s,0ms);
+  startDate.setHours(0, 0, 0, 0);
+
+  // endDate's hours will be till (23,59,59,999). 1ms before next day.
+  endDate.setHours(23, 59, 59, 999);
+
+  // Getting bookings between start and end date
+  const bookings = await Booking.find({
+    createdAt: {
+      $gt: startDate,
+      $lt: endDate,
+    },
+  });
+
+  const bookingsCount = bookings.length;
+
+  // Calculating total sales
+  const totalSales = bookings?.reduce(
+    (acc, currElem) => acc + currElem.amountPaid,
+    0
+  );
+console.log({bookings,totalSales})
+  return NextResponse.json({
+    bookingsCount,
+    totalSales,
+  });
+});

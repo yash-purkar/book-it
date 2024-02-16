@@ -1,6 +1,12 @@
+import { addCommasInAmount } from '@/helpers/helpers'
 import React from 'react'
-
-export const SalesStats = () => {
+interface SalesStatsProps{
+  data:{
+    totalSales?:number
+    bookingsCount?:number,
+  }
+}
+export const SalesStats:React.FC<SalesStatsProps> = ({data}) => {
   return (
     <div className="row my-5">
         <div className="col-12 col-lg-6">
@@ -16,7 +22,7 @@ export const SalesStats = () => {
                 <div className="col-10">
                   <p className="card-title">Sales</p>
                   <p className="h4">
-                    <b>873,343</b>
+                    <b>{addCommasInAmount(data?.totalSales ?? 0) ?? '-'}</b>
                   </p>
                 </div>
               </div>
@@ -36,7 +42,7 @@ export const SalesStats = () => {
                 <div className="col-10">
                   <p className="card-title">Bookings</p>
                   <p className="h4">
-                    <b>230</b>
+                    <b>{data?.bookingsCount ?? '-'}</b>
                   </p>
                 </div>
               </div>
