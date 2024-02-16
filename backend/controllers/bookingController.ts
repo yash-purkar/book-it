@@ -120,6 +120,59 @@ export const getBookingDetails = catchAsyncError(
   }
 );
 
+//It will give last 6 months sales and bookings.
+const getLastSixMonthsSales = async () => {
+  const lastSixMonthsSalesData: any[] = [];
+  // Todays date.
+  const currentDate = momentRange();
+
+  async function fetchSalesOfSingleMonth(startDate: any, endDate: any) {
+    const result = await Booking.aggregate([
+      {
+        //Filtering between start and end date
+        $match: {
+          createdAt: {
+            $gte: startDate.toDate(),
+            $lte: endDate.toDate(),
+          },
+        },
+      },
+      {
+        //grouping
+        $group: {
+          _id: null,
+          // sum of amount paid
+          totalSales: { $sum: "$amountPaid" },
+          // it is like counter.
+          numberOfBookings: { $sum: 1 },
+        },
+      },
+    ]);
+
+    const { totalSales, numberOfBookings } =
+      result.length > 0 ? result[0] : { totalSales: 0, numberOfBookings: 0 };
+
+    lastSixMonthsSalesData.push({
+      month: startDate.format("MMMM"),
+      totalSales,
+      numberOfBookings,
+    });
+  }
+
+  //we want to call the fn 6 times to get the last 6 months data.
+  for (let i = 0; i < 6; i++) {
+    const startDateOfMonth = momentRange(currentDate).startOf("months");
+    const endDateOfMonth = momentRange(currentDate).endOf("months");
+
+    await fetchSalesOfSingleMonth(startDateOfMonth, endDateOfMonth);
+
+    // subtract by one month to go to the previous one.
+    currentDate.subtract(1,'months')
+  }
+
+  return lastSixMonthsSalesData;
+};
+
 export const getSalesStats = catchAsyncError(async (request: NextRequest) => {
   const { searchParams } = new URL(request.url);
   // Getting startDate and endDate
@@ -147,9 +200,13 @@ export const getSalesStats = catchAsyncError(async (request: NextRequest) => {
     (acc, currElem) => acc + currElem.amountPaid,
     0
   );
-console.log({bookings,totalSales})
+  
+
+  const lastSixMonthsSalesData = await getLastSixMonthsSales();
+
   return NextResponse.json({
     bookingsCount,
     totalSales,
+    lastSixMonthsSalesData
   });
 });

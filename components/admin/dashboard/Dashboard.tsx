@@ -80,7 +80,7 @@ export const Dashboard = () => {
       <div className="row">
         <div className="col-12 col-lg-8">
           <h4 className="my-5 text-center">Sales History</h4>
-          <SalesChart />
+          <SalesChart lastSixMonthsSalesData={data?.lastSixMonthsSalesData} />
         </div>
 
         <div className="col-12 col-lg-4 text-center">

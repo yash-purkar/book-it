@@ -903,3 +903,114 @@ if(startDate && endDate && !data) {
 }
 
 And pass this data to SalesStats to display
+
+// NOW WE WILL GET LAST 6 MONTHS SALES AND BOOKINGS TO SHOW IN THE LINECHART
+
+//We'll use MongoDB aggregation fot this.
+Aggregation operations process multiple documents and return computed result.
+so in our case it will takes multiple boooking data and give us the one.
+
+aggregate() takes the array and that array has some stages
+e.g 
+1st is filter stage.
+It filters the documents in our case bookings.
+$match
+
+2nd is group
+Ho do we want to group the documents.
+
+1st we'll create a function in bookingController for the same
+
+const getLastSixMonthsSales = async () => {
+  // It will contain the sales data of last 6 months.
+    const lastSixMonthsSales = any[];
+  
+  Now we need current date to get the last 6 months from today itself.
+
+  const currentDate = moment.Moment();
+
+  //This fn 
+  // It will take the startdate (1st day of month) and enddate last day of the month.
+
+  async function fetchSalesOfSingleMonth () {
+
+  }
+
+  // We'll have to call this function 6 times to get the sales of last 6 months.
+
+  for(let i=0;i<6;i++){
+    //start date or the day of the month.
+    const startDateOfTheMonth = moment(currentDate).startOf('month');
+
+    //end date or the day of the month.
+    const endDateOfTheMonth = moment(currentDate).endOf('month');
+
+
+    //calling the fn to get the sales of single month.
+    await fetchSalesOfSingleMonth(startDateOfTheMonth,endDateOfTheMonth);
+
+
+    Now we've to go back 1 month everytime for 6 times 
+    so we'll subtract the 1 month everytime from the currentDate.
+
+    // It will subtract one month everytime and the previous month's dates will be passed to the fetchSalesOfSingleMonth fn.
+
+    currentDate.subtract(1,'months');
+
+  }
+
+
+//write this fn before for loop
+
+in this fn we'll write aggregation
+
+async fn fetchSalesOfSingleMonth(startDate,endDate) {
+  cons result = Booking.aggregate([
+    //1st stage filter out the date. 
+    // we want the data of single month every time so we'll get the data between start date and end date.
+
+    $match : {
+      createdAt: {
+        $gte:startDate,
+        $lte: endDate
+        }
+    },
+
+    // 2nd stage Grouping.
+    We can specify on which basis we want to group.
+
+    $group : {
+      _id:null,
+      //we want to get the total sales of that month.
+      totalSales: {$sum: "$amountPaid"},
+      //we want to get the numOfBookings in that month
+      numberOfBookings: {$sum:1},
+      // so basically sum 1 is like count of bookings which we've at this stage.
+    }
+  ]);
+
+//If result is there take that otherwise make it 0;
+  const {totalSales,numberOfBookings} = result.length > 0 ? result[0] : {totalSales:0,numberOfBookings:0}
+
+  lastSixMonthsSales.push({
+    monthName:startDate.month or someting like this,
+    totalSales,
+    numberOfBookings
+  })
+}
+
+return lastSixMonthsSales;
+}
+
+Now in getSalesStats controller we'll call this fn.
+
+const lastSixMonthsSales = await getLastSixMonthsSales();
+
+and return in nextresponse.
+
+Now we'll have this data in Dashboard so we'll pass it down to the line chart, we'll use multiaxis line chart. we just need to change the options. And need to pass the axis id there.
+
+Now in chart in
+for labels we'll show the months 
+so we'll map over the salesdata there and return the month everytime.
+And for the amount and booking pass it like months.
