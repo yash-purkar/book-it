@@ -52,6 +52,9 @@ export const getAllRooms = catchAsyncError(async (request: NextRequest) => {
 export const addNewRoom = catchAsyncError(async (request: NextRequest) => {
   const body = await request.json();
 
+  //adding user in body to know who has added this room.
+  body.user = request.user._id;
+
   const newRoom = new Room(body);
   await newRoom.save();
   return NextResponse.json({

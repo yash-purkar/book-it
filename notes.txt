@@ -1137,3 +1137,55 @@ Now we'll create new compoent and call that component in this page.tsx and pass 
 
 There we'll use datatable as we've used in mybookings.
 so in datatable we'll display roomID , roomName and some actions for datable.
+
+
+// CREATE NEW ROOM
+We already have controller to addNewRook we'll use that only.
+we alrady have endpoint for this in /admin/rooms POST REQ.
+We need to add user in body, to know that who has added that room.
+
+so in body.user = req.user._id
+
+now we'll create new page in 
+admin/rooms/new
+In that we'll cann NewRoom component
+in NewRoom
+we'll have a state to store all the details like roomname, description, isInternet and etc...
+
+then we'll create a mutation for the same.
+
+and call the mutation hook there.
+
+and in useEffect handle the error and isSuccess
+if error show the toast error
+if success show the success toast and push the user to admin bookings page.
+
+create submitHandler in that 
+we'll generatePayload
+roomData = {
+  add the data here one by one
+}
+
+newRoom(roomData);
+
+
+and onChange
+in onchange we'LL
+
+setRoomDetails({
+  ...roomDetals,
+  [e.target.name] : e.target.type === "checkbox" ? (e.target as HTMLInputElement).checked : e.target.value
+});
+
+//If it is checkbox we want to store the true or false otherwise the value itself.
+
+// For roomFeatures (checkboxex) we'll create the array.
+
+const roomFeatures: {name:string,value:keyof typeof roomDetails}[] = [
+  {name:'Internet",value:'internet'},
+  and etcc.
+]
+
+value will be keyof typeof roomDetails.
+
+Now we'll map on this to show the checkboxes.

@@ -6,13 +6,7 @@ const getAllRooms = async () => {
   //Bcz this route is protected
   const authHeaders = getAuthHeader();
   try {
-    const response = await fetch(`${process.env.API_URL}/api/admin/rooms`, {
-      headers: authHeaders.headers,
-      next: {
-        tags: ["Rooms"],
-        //We'll use this later for revalidate.
-      },
-    });
+    const response = await fetch(`${process.env.API_URL}/api/admin/rooms`, authHeaders);
 
     return response.json();
   } catch (error) {

@@ -63,7 +63,7 @@ export const AllRooms: React.FC<AllRoomsProps> = ({ allRooms: { rooms } }) => {
         <h1 className="my-5 position-relative">
           All Rooms
           <Link
-            href={"/admin/rooms/new"}
+            href={"/admin/rooms/new_room"}
             className="mt-0 btn text-decoration-underline"
           >
             Create new room

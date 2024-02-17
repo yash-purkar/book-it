@@ -34,7 +34,6 @@ export const RoomFeatures = ({room}:RoomFeaturesProps) => {
         <i className={room.isRoomCleaning ? "fa fa-check text-success" : "fa fa-times text-danger"} aria-hidden="true"></i>
         <p>Room Cleaning</p>
       </div>
-      {/* ... (Repeat the above room-feature for each feature) */}
     </div>
   );
 };
