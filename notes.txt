@@ -1098,3 +1098,42 @@ IF 5 USERS HAS BOOKED ROOM A
 
 SO THE A WILL TAKE MORE SPACE THATN B AND C
 AND B WILL TAKE MORE SPACE THATN C
+
+
+
+// DISPLAY ALL ROOMS FOR ADMIN
+In roomsController we'll create another controller to get all the rooms for admin.
+
+export const getAllRoomsForAdmin = catchAsync.....
+
+const rooms = await Room.find();
+
+return the rooms in nextresponse.
+
+Now end point for the same.
+
+We already have endpoint in api/admin/rooms 
+but that is for create new room 
+we'll create another in that route only.
+
+export const GET = aync() ..... remaing will be same.
+and this will be protected route and only will be accesable by admin.
+
+Now we have to create the page for this.
+in app/admin we'll create rooms and in this page.tsx
+so here we'll call the api to get all the admin rooms. as we've called on the homepage.
+
+there we'll pass the authHeaders because it will be protected route.
+//call authHeaders fn to get the authHeaders.
+{
+  headers: authHeaders.header.
+  next: {
+    tags: ['Rooms']
+    //we'll need this later for revalidate.
+  }
+}
+
+Now we'll create new compoent and call that component in this page.tsx and pass the rooms data there.
+
+There we'll use datatable as we've used in mybookings.
+so in datatable we'll display roomID , roomName and some actions for datable.

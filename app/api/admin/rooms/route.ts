@@ -1,16 +1,27 @@
-import connectToDB from '@/backend/config/db.Connect';
-import { addNewRoom } from '@/backend/controllers/roomController';
-import {createEdgeRouter} from 'next-connect'
-import { NextRequest } from 'next/server';
+import connectToDB from "@/backend/config/db.Connect";
+import {
+  addNewRoom,
+  getAllRoomsForAdmin,
+} from "@/backend/controllers/roomController";
+import { authorizeRoles, isAuthenticated } from "@/backend/middlewares/auth";
+import { createEdgeRouter } from "next-connect";
+import { NextRequest } from "next/server";
 
-interface RequestContext {};
+interface RequestContext {}
 
-const router = createEdgeRouter<NextRequest,RequestContext>();
+const router = createEdgeRouter<NextRequest, RequestContext>();
 
 connectToDB();
 
-router.post(addNewRoom);
+router.use(isAuthenticated, authorizeRoles("admin")).post(addNewRoom);
+router.use(isAuthenticated, authorizeRoles("admin")).get(getAllRoomsForAdmin);
+
 // It will call for all POST requests on this route.
-export async function POST(request:NextRequest,ctx:RequestContext) {
-    return router.run(request,ctx);
+export async function POST(request: NextRequest, ctx: RequestContext) {
+  return router.run(request, ctx);
+}
+
+// GET request to get the rooms for admin
+export async function GET(request: NextRequest, ctx: RequestContext) {
+  return router.run(request, ctx);
 }
