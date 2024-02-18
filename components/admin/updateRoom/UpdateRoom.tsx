@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useAddNewRoomMutation, useUpdateRoomMutation } from "@/redux/api/roomApi";
 import toast from "react-hot-toast";
 import { IRoom } from "@/backend/models/room";
+import { revalidate } from "@/helpers/revalidate";
 
 interface UpdateRoomProps {
     room:IRoom
@@ -50,7 +51,8 @@ export const UpdateRoom:React.FC<UpdateRoomProps> = ({room}) => {
     }
 
     if (isSuccess) {
-      router.push("/admin/rooms");
+      revalidate('roomDetails')
+      router.refresh();
       toast.success("Room Updated");
     }
   }, [error, isSuccess]);

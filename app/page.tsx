@@ -12,8 +12,9 @@ const getRoomsData = async (searchParams: string) => {
 
   try {
     const response = await fetch(
-      `${process.env.API_URL}/api/rooms?${queryString}`,
-      { cache: "no-cache" }
+      `${process.env.API_URL}/api/rooms?${queryString}`,{
+        cache:'no-cache'
+      }
     );
     return await response.json();
   } catch (error) {
