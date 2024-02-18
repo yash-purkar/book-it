@@ -5,7 +5,6 @@ import Link from "next/link";
 import React from "react";
 import styles from "./allRooms.module.css";
 import { MDBDataTable } from "mdbreact";
-import Loading from "@/app/admin/loading";
 interface AllRoomsProps {
   allRooms: {
     rooms: IRoom[];
@@ -41,7 +40,7 @@ export const AllRooms: React.FC<AllRoomsProps> = ({ allRooms: { rooms } }) => {
         roomName: room.name,
         actions: (
           <div className={styles.action}>
-            <Link href={`/admin/rooms/${room._id}`}>
+            <Link href={`/admin/rooms/update_room/${room._id}`}>
               <i className="fa fa-pencil"></i>
             </Link>
             <Link href={`/admin/rooms/${room._id}/upload_images`}>

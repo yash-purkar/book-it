@@ -4,6 +4,7 @@ import ErrorHandler from "../utils/errorHandler";
 import { catchAsyncError } from "../middlewares/catchAsyncError";
 import APIFilters from "../utils/apiFilters";
 import Booking from "../models/booking";
+import { upload_file as uploadImageToCloudinary } from "../utils/cloudinary";
 
 // get all rooms  - api/rooms
 export const getAllRooms = catchAsyncError(async (request: NextRequest) => {
@@ -174,3 +175,34 @@ export const getAllRoomsForAdmin = catchAsyncError(async (req: NextRequest) => {
     rooms,
   });
 });
+
+// Upload new images of the room -> /api/admin/rooms/[id]/upload_images/route.ts
+
+export const uploadImages = catchAsyncError(
+  async (request: NextRequest, { params }: { params: { id: string } }) => {
+    const room = await Room.findById(params.id);
+    const body = await request.json();
+
+    //If room isn't there
+    if (!room) {
+      throw new ErrorHandler("Room Not Found", 404);
+    }
+
+    //This will upload the image in cloudinary.
+    const uploader = (image: any) =>
+      uploadImageToCloudinary(image, "bookit/rooms");
+
+    //We'll get the cloudinary url's of images in array.
+    const urls = await Promise.all(body.map(uploader));
+
+    // push image url's in room.
+    room?.images?.push(...urls);
+
+    await room.save();
+
+    return NextResponse.json({
+      Success: true,
+      room,
+    });
+  }
+);

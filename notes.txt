@@ -1189,3 +1189,96 @@ const roomFeatures: {name:string,value:keyof typeof roomDetails}[] = [
 value will be keyof typeof roomDetails.
 
 Now we'll map on this to show the checkboxes.
+
+
+//UPDATE ROOM DETAILS
+1ST We'll create the mutation for this.
+and url will be /admin/rooms/${id} which we already have but this will be put request.
+And we already have the controller for this.
+
+Will create update room page in app directory
+in app -> admin -> rooms -> [id] ->
+There we'll get the id and we'll fetch the details of that room and pass it down to the UpdateRoom Component
+So there we can show the values initially.
+We'll use same code of New Room component bcz everything will be same.
+
+And then call that mutation here in comp, and pass the id and body there.
+
+
+// REVALIDATE
+
+Now if we cache the roomDetails api data and if we update the roomDetails even after refresh we'll not going to see the update room details bcz it is taking from cache.
+So we've to revalidate it. Whenever we'll update the room we'll revalidate the data so new data will be there.
+
+// We'll do on-demand Revalidation
+in RoomDetails comp we've not used no-cached so it will take the cached data only, but we want when we update the roomDetails it should take the updated roomDetails.
+
+We need to give 
+next: {
+  tags: ['roomDetails']
+}
+// We'll revalidate means refetch the data of this using this tag.
+
+Now we've to create the endpoint for this,
+so we'll create It
+
+in api create new -> revalidate/route.ts
+Now we need secret token for revaidation so we'll create new variable in env and add the secret value there.
+
+and in tis endpoints
+we'll 1st import NextRequest for type and NextResponse to return. and also 
+revalidateTag fn from next/cache to revalidate the given gag.
+
+And we'll get the secret from the params and tag from the params.
+And 1st condition will be if secret given by user is not if not we'll return Invalid secret
+
+2nd will be if tag is not there we'll return invalid tag.
+
+otherwise we'll revalidate(tag);
+
+Now in helpers we'll create new file revalidate
+in that we'll create fn 
+
+const revalidate = await(tag:string) => {
+  await fetch(`${process.env.API_URL}/api/revalidate?tag=${tag}&secret={process.env.REVALIDATE_SECRET_TOKEN}`,{
+    method:'POST'
+  })
+}
+
+And in updateRoomDetails component we'll call this function after updating the room details, means in useEffect in isSuccess condition.
+
+When we call the revalidateTag(tag)
+It marks the page associated with the provided tag as "stale," which means the next request to that page will trigger a regeneration.
+in our case roomDetails page will be mark as a stale.
+The next time a request is made to the page associated with the 'roomDetails' tag, Next.js recognizes that it's marked as "stale."
+Next.js will then trigger a regeneration of the static page content associated with that tag.
+Stale means - 
+When a page is marked as "stale," it means that the content of the page is outdated or needs to be updated.
+
+Marks the page associated with the specified tag as "stale."
+It doesn't immediately trigger regeneration but signals that the next request to that page should result in regeneration. means new data.
+
+
+// UPLOAD IMAGES ENDPOINT
+
+in roomsController we'll create new fn uploadImages which will take id of the room as params
+so 1st
+we'll find the room by given id
+and we'll get body which will contain images
+we'll check if room isn't there throw new error room not found.
+
+otherwie we'll do 
+
+const uploader = (image) => uploadeImageToCloudinary(image,'bookit/rooms');
+
+const urls = (await Promise.all(body.map(uploader)));
+
+It will upload the images to the cloudinary and at the end we'll get the array of url's
+
+and that will push in the room images array.
+
+Now create the endpoint for the same 
+/api/admin/rooms/[id]/upload_images/route.ts
+It will be put request
+
+Now then create the mutation for the same in redux in roomsApi
