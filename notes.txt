@@ -1257,3 +1257,28 @@ When a page is marked as "stale," it means that the content of the page is outda
 
 Marks the page associated with the specified tag as "stale."
 It doesn't immediately trigger regeneration but signals that the next request to that page should result in regeneration. means new data.
+
+
+// UPLOAD IMAGES ENDPOINT
+
+in roomsController we'll create new fn uploadImages which will take id of the room as params
+so 1st
+we'll find the room by given id
+and we'll get body which will contain images
+we'll check if room isn't there throw new error room not found.
+
+otherwie we'll do 
+
+const uploader = (image) => uploadeImageToCloudinary(image,'bookit/rooms');
+
+const urls = (await Promise.all(body.map(uploader)));
+
+It will upload the images to the cloudinary and at the end we'll get the array of url's
+
+and that will push in the room images array.
+
+Now create the endpoint for the same 
+/api/admin/rooms/[id]/upload_images/route.ts
+It will be put request
+
+Now then create the mutation for the same in redux in roomsApi
