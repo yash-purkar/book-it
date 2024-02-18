@@ -3,6 +3,7 @@ import {
   deleteRoom,
   updateRoomDetails,
 } from "@/backend/controllers/roomController";
+import { authorizeRoles, isAuthenticated } from "@/backend/middlewares/auth";
 import { createEdgeRouter } from "next-connect";
 import { NextRequest } from "next/server";
 
@@ -16,7 +17,7 @@ const router = createEdgeRouter<NextRequest, RequestContext>();
 
 connectToDB();
 
-router.put(updateRoomDetails);
+router.use(isAuthenticated,authorizeRoles('admin')).put(updateRoomDetails);
 router.delete(deleteRoom);
 
 // It will update room details

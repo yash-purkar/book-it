@@ -1189,3 +1189,19 @@ const roomFeatures: {name:string,value:keyof typeof roomDetails}[] = [
 value will be keyof typeof roomDetails.
 
 Now we'll map on this to show the checkboxes.
+
+
+//UPDATE ROOM DETAILS
+1ST We'll create the mutation for this.
+and url will be /admin/rooms/${id} which we already have but this will be put request.
+And we already have the controller for this.
+
+Will create update room page in app directory
+in app -> admin -> rooms -> [id] ->
+There we'll get the id and we'll fetch the details of that room and pass it down to the UpdateRoom Component
+So there we can show the values initially.
+We'll use same code of New Room component bcz everything will be same.
+
+And then call that mutation here in comp, and pass the id and body there.
+
+And there we'll 
