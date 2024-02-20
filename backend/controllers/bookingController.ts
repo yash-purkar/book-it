@@ -1,5 +1,4 @@
-export const dynamic = 'auto'
-// 'auto' | 'force-dynamic' | 'error' | 'force-static'
+export const dynamic = 'force-dynamic';
 
 import { NextRequest, NextResponse } from "next/server";
 import { catchAsyncError } from "../middlewares/catchAsyncError";
@@ -61,7 +60,7 @@ export const checkRoomAvailability = catchAsyncError(
         { checkInDate: { $lte: checkoutDate } },
         { checkoutDate: { $gte: checkInDate } },
       ],
-    });
+    }).exec();
 
     // If the length is 0 means there are no bookings, If length is not 0 we've some bookings.
     const isAvailable: Boolean = bookings.length === 0;

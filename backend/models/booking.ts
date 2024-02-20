@@ -63,5 +63,4 @@ const bookingSchema: mongoose.Schema<IBooking> = new mongoose.Schema(
   { timestamps: true }
 );
 
-// @ts-ignore
-export default mongoose.models.Booking ||mongoose.model<IBooking>("Booking", bookingSchema);
+export default (mongoose.models.Booking as mongoose.Model<IBooking>) || mongoose.model('Booking', bookingSchema);

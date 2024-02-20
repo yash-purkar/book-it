@@ -83,5 +83,4 @@ userSchema.methods.getResetPasswordToken = function (): string {
   return resetToken;
 };
 
-// @ts-ignore
-export default mongoose.models.User || mongoose.model<IUser>("User", userSchema);
+export default (mongoose.models.User as mongoose.Model<IUser>) || mongoose.model('User', userSchema);
