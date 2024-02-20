@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 import connectToDB from '@/backend/config/db.Connect';
 import { getRoomDetails } from '@/backend/controllers/roomController';
 import {createEdgeRouter} from 'next-connect';

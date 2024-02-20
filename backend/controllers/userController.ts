@@ -1,5 +1,3 @@
-export const dynamic = 'force-dynamic';
-
 import { NextRequest, NextResponse } from "next/server";
 import { catchAsyncError } from "../middlewares/catchAsyncError";
 import User from "../models/user";

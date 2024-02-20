@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 import connectToDB from "@/backend/config/db.Connect";
 import { updateProfile } from "@/backend/controllers/userController";
 import { isAuthenticated } from "@/backend/middlewares/auth";

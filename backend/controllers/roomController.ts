@@ -1,5 +1,3 @@
-export const dynamic = 'force-dynamic'
-
 import { NextRequest, NextResponse } from "next/server";
 import Room, { IReview, IRoom } from "@/backend/models/room";
 import ErrorHandler from "../utils/errorHandler";

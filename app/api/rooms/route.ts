@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 import { NextRequest, NextResponse } from "next/server";
 import { createEdgeRouter } from "next-connect";
 import {  getAllRooms } from "@/backend/controllers/roomController";

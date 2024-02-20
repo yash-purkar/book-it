@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 import connectToDB from "@/backend/config/db.Connect";
 import { registerUser } from "@/backend/controllers/userController";
 import { createEdgeRouter } from "next-connect";
