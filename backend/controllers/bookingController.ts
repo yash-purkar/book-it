@@ -1,5 +1,5 @@
-export const dynamic = "force-dynamic"
-export const revalidate = 0
+export const dynamic = 'auto'
+// 'auto' | 'force-dynamic' | 'error' | 'force-static'
 
 import { NextRequest, NextResponse } from "next/server";
 import { catchAsyncError } from "../middlewares/catchAsyncError";
