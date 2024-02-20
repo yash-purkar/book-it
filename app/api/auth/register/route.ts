@@ -11,6 +11,6 @@ connectToDB();
 
 router.post(registerUser);
 
-export const POST = async (request: NextRequest, ctx: RequestContext) => {
+export const POST = async (request: NextRequest, ctx: RequestContext):Promise<any> => {
   return router.run(request, ctx);
 };

@@ -54,7 +54,7 @@ export const addNewRoom = catchAsyncError(async (request: NextRequest) => {
   const body = await request.json();
 
   //adding user in body to know who has added this room.
-  body.user = request.user._id;
+  body.user = request?.user?._id;
 
   const newRoom = new Room(body);
   await newRoom.save();
@@ -116,7 +116,7 @@ export const addReview = catchAsyncError(async (request: NextRequest) => {
   const { rating, comment, roomId } = body;
 
   const review = {
-    user: request.user._id,
+    user: request?.user?._id,
     rating: Number(rating),
     comment,
   };
@@ -126,13 +126,13 @@ export const addReview = catchAsyncError(async (request: NextRequest) => {
 
   // Checking is user already has given review or not.
   const isAlreadyReviewed = room?.reviews.find(
-    (review: IReview) => review.user.toString() === request.user._id.toString()
+    (review: IReview) => review.user.toString() === request?.user?._id.toString()
   );
 
   //If user already has given review we'll update that.
   if (isAlreadyReviewed) {
     room?.reviews.forEach((review: IReview) => {
-      if (review.user.toString() === request.user._id.toString()) {
+      if (review.user.toString() === request?.user?._id.toString()) {
         review.comment = comment;
         review.rating = Number(rating);
       }
@@ -159,7 +159,7 @@ export const canAddReview = catchAsyncError(async (request: NextRequest) => {
   const roomId = searchParams.get("roomId");
 
   // If there is a booking in this room of this user.
-  const bookings = await Booking.find({ room: roomId, user: request.user._id });
+  const bookings = await Booking.find({ room: roomId, user: request?.user?._id });
   const canGiveReview = bookings.length > 0 ? true : false;
 
   return NextResponse.json({

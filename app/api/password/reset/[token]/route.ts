@@ -11,6 +11,6 @@ connectToDB();
 
 router.put(resetPassword)
 
-export const PUT = async (request:NextRequest,ctx:RequestContext) => {
+export const PUT = async (request:NextRequest,ctx:RequestContext):Promise<any> => {
     return router.run(request,ctx)
 }

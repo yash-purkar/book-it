@@ -17,11 +17,11 @@ router.use(isAuthenticated, authorizeRoles("admin")).post(addNewRoom);
 router.use(isAuthenticated, authorizeRoles("admin")).get(getAllRoomsForAdmin);
 
 // It will call for all POST requests on this route.
-export async function POST(request: NextRequest, ctx: RequestContext) {
+export async function POST(request: NextRequest, ctx: RequestContext):Promise<any> {
   return router.run(request, ctx);
 }
 
 // GET request to get the rooms for admin
-export async function GET(request: NextRequest, ctx: RequestContext) {
+export async function GET(request: NextRequest, ctx: RequestContext):Promise<any> {
   return router.run(request, ctx);
 }

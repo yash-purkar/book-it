@@ -1,6 +1,6 @@
 import connectToDB from "@/backend/config/db.Connect";
 import User, { IUser } from "@/backend/models/user";
-import { NextApiRequest, NextApiResponse } from "next";
+import { NextApiResponse } from "next";
 import NextAuth from "next-auth/next";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
@@ -10,7 +10,7 @@ interface Creds {
   password: string;
 }
 
-async function auth(request: NextApiRequest, response: NextApiResponse) {
+async function auth(request: any, response: NextApiResponse) {
   return await NextAuth(request, response, {
     providers: [
       CredentialsProvider({

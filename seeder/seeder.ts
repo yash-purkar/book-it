@@ -4,7 +4,8 @@ import { rooms } from "./data";
 
 const seedData = async () => {
   try {
-    await mongoose.connect("mongodb://127.0.0.1:27017/book-it");
+    const pass = encodeURIComponent("Yash(@2002)")
+    await mongoose.connect(`mongodb+srv://yash:${pass}@book-it.laoalfh.mongodb.net/book-it?retryWrites=true&w=majority`);
 
     await Room.deleteMany();
     console.log("Delted Old Rooms Data!");

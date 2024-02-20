@@ -10,6 +10,6 @@ const router = createEdgeRouter<NextRequest, RequestContext>();
 connectToDB();
 router.use(isAuthenticated).get(canAddReview);
 
-export const GET = async (request: NextRequest, ctx: RequestContext) => {
+export const GET = async (request: NextRequest, ctx: RequestContext):Promise<any> => {
   return router.run(request, ctx);
 };

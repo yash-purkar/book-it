@@ -13,6 +13,6 @@ const router = createEdgeRouter<NextRequest,RequestContext>();
 connectToDB();
 router.use(isAuthenticated,authorizeRoles('admin')).put(uploadImages)
 
-export const PUT = async (request:NextRequest,ctx:RequestContext) => {
+export const PUT = async (request:NextRequest,ctx:RequestContext):Promise<any> => {
 return router.run(request,ctx)
 }

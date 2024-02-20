@@ -1,8 +1,8 @@
-import mongoose, { Document, Schema, mongo } from "mongoose";
+import * as mongoose from "mongoose";
 import { IRoom } from "./room";
 import { IUser } from "./user";
 
-export interface IBooking extends Document {
+export interface IBooking extends mongoose.Document {
   room: IRoom;
   user: IUser;
   checkInDate: Date;
@@ -17,7 +17,7 @@ export interface IBooking extends Document {
   createdAt: Date;
 }
 
-const bookingSchema: Schema<IBooking> = new Schema(
+const bookingSchema: mongoose.Schema<IBooking> = new mongoose.Schema(
   {
     room: {
       type: mongoose.SchemaTypes.ObjectId,
@@ -63,5 +63,5 @@ const bookingSchema: Schema<IBooking> = new Schema(
   { timestamps: true }
 );
 
-export default mongoose.models.Booking ||
-  mongoose.model<IBooking>("Booking", bookingSchema);
+// @ts-ignore
+export default mongoose.models.Booking ||mongoose.model<IBooking>("Booking", bookingSchema);

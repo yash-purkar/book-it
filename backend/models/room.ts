@@ -1,4 +1,4 @@
-import mongoose, { ObjectId, Schema,Document } from "mongoose";
+import * as mongoose from "mongoose";
 import { IUser } from "./user";
 
 interface ILocation {
@@ -24,7 +24,7 @@ export interface IReview {
   comment: string;
 }
 
-export interface IRoom extends Document{
+export interface IRoom extends mongoose.Document{
   name: string;
   description: string;
   pricePerNight: number;
@@ -46,7 +46,7 @@ export interface IRoom extends Document{
   createdAt: Date;
 }
 
-const roomSchema: Schema<IRoom> = new Schema({
+const roomSchema: mongoose.Schema<IRoom> = new mongoose.Schema({
   name: {
     type: String,
     required: [true, "Please enter room name."],
@@ -156,5 +156,5 @@ const roomSchema: Schema<IRoom> = new Schema({
   },
 });
 
-
+// @ts-ignore
 export default mongoose.models.Room || mongoose.model<IRoom>('Room',roomSchema);

@@ -11,6 +11,6 @@ connectToDB();
 
 router.use(isAuthenticated).put(updatePassword);
 
-export const PUT = (request: NextRequest, ctx: RequestContext) => {
+export const PUT = (request: NextRequest, ctx: RequestContext):Promise<any> => {
   return router.run(request, ctx);
 };
