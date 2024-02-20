@@ -1,5 +1,4 @@
-export const dynamic = 'auto'
-// 'auto' | 'force-dynamic' | 'error' | 'force-static'
+export const dynamic = 'force-dynamic';
 
 import { NextRequest, NextResponse } from "next/server";
 import { catchAsyncError } from "../middlewares/catchAsyncError";

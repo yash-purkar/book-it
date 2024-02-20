@@ -1,5 +1,4 @@
-export const dynamic = 'auto'
-// 'auto' | 'force-dynamic' | 'error' | 'force-static'
+export const dynamic = 'force-dynamic'
 
 import { NextRequest, NextResponse } from "next/server";
 import Room, { IReview, IRoom } from "@/backend/models/room";
@@ -146,7 +145,7 @@ export const addReview = catchAsyncError(async (request: NextRequest) => {
   }
 
   // Calculating average of rating
-  room.raging =
+  room.ratings =
     room.reviews.reduce((acc: number, curr: IReview) => acc + curr.rating, 0) /
     room.reviews.length;
 
