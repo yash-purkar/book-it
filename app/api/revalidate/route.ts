@@ -1,6 +1,7 @@
+export const dynamic = 'force-dynamic';
+
 import { revalidateTag } from "next/cache";
 import { NextRequest, NextResponse } from "next/server"
-
 
 export const POST = async(request:NextRequest):Promise<any> => {
     const secret = request.nextUrl.searchParams.get('secret');

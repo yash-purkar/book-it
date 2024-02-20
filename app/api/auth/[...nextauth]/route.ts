@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 import connectToDB from "@/backend/config/db.Connect";
 import User, { IUser } from "@/backend/models/user";
 import { NextApiResponse } from "next";

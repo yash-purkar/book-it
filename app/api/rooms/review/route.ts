@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 import connectToDB from "@/backend/config/db.Connect";
 import { addReview } from "@/backend/controllers/roomController";
 import { isAuthenticated } from "@/backend/middlewares/auth";

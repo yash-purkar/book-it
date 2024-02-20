@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 import connectToDB from "@/backend/config/db.Connect";
 import { getBookingDetails } from "@/backend/controllers/bookingController";
 import { isAuthenticated } from "@/backend/middlewares/auth";
