@@ -27,14 +27,14 @@ export const Home = ({data}:HomeProps) => {
         <div className="row mt-4">
           <div className="col-sm-12 col-md-6 col-lg-3 my-3 d-flex">
             {
-              data.rooms.length === 0 ? <div className="alert danger mt-5 w-100">
+              data?.rooms.length === 0 ? <div className="alert danger mt-5 w-100">
                 No Rooms.
-              </div> : data.rooms.map((room,i) => <SingleRoom key={i} room={room} />)
+              </div> : data?.rooms.map((room,i) => <SingleRoom key={i} room={room} />)
             }
           </div>
         </div>
       </section>
-      <CustomPagination resultsPerPage={data.resultsPerPage} filteredRoomsCount={data.filteredRoomsCount}/>
+      <CustomPagination resultsPerPage={data?.resultsPerPage} filteredRoomsCount={data?.filteredRoomsCount}/>
     </div>
   );
 };

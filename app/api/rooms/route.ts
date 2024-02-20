@@ -22,6 +22,6 @@ connectToDB();
 router.get(getAllRooms)
 
 // It will call for all GET requests on this route.
-export async function GET(request: NextRequest, ctx: RequestContext) {
+export async function GET(request: NextRequest, ctx: RequestContext):Promise<any> {
   return router.run(request, ctx);
 }

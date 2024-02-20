@@ -27,7 +27,7 @@ interface HomePageProps {
 export default async function HomePage({ searchParams }: HomePageProps) {
   const data = await getRoomsData(searchParams);
 
-  if (data.errorMessage) {
+  if (data?.errorMessage) {
     return <Error error={{ ...data, message: data.errorMessage }} />;
   }
   return (

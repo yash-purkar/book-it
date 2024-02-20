@@ -11,6 +11,6 @@ const router = createEdgeRouter<NextRequest, RequestContext>();
 connectToDB();
 router.use(isAuthenticated,authorizeRoles('admin')).get(getSalesStats);
 
-export const GET = async (req: NextRequest, ctx: RequestContext) => {
+export const GET = async (req: NextRequest, ctx: RequestContext):Promise<any> => {
   return router.run(req, ctx);
 };

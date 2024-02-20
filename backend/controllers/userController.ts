@@ -39,7 +39,7 @@ export const updateProfile = catchAsyncError(async (request: NextRequest) => {
     email: body.email,
   };
 
-  const user = await User.findByIdAndUpdate(request.user._id, userData);
+  const user = await User.findByIdAndUpdate(request?.user?._id, userData);
 
   return NextResponse.json({
     Success: true,
@@ -51,7 +51,7 @@ export const updateProfile = catchAsyncError(async (request: NextRequest) => {
 export const updatePassword = catchAsyncError(async (request: NextRequest) => {
   const body = await request.json();
 
-  const user = await User.findById(request.user._id).select("+password");
+  const user = await User.findById(request?.user?._id).select("+password");
 
   const isPasswordMatched = await user.comparePasswordCustomMethod(
     body.oldPassword
@@ -80,7 +80,7 @@ export const uploadAvatar = catchAsyncError(async (request: NextRequest) => {
     await delete_file(request.user.avatar.public_id);
   }
 
-  const user = await User.findByIdAndUpdate(request.user._id, {
+  const user = await User.findByIdAndUpdate(request?.user?._id, {
     avatar: avatarUploadResult,
   });
 

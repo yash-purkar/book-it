@@ -21,11 +21,11 @@ router.use(isAuthenticated,authorizeRoles('admin')).put(updateRoomDetails);
 router.delete(deleteRoom);
 
 // It will update room details
-export const PUT = async (request: NextRequest, ctx: RequestContext) => {
+export const PUT = async (request: NextRequest, ctx: RequestContext):Promise<any> => {
   return router.run(request, ctx);
 };
 
 // It will delete a room
-export const DELETE = async (request: NextRequest, ctx: RequestContext) => {
+export const DELETE = async (request: NextRequest, ctx: RequestContext):Promise<any> => {
   return router.run(request, ctx);
 };

@@ -9,6 +9,6 @@ connectToDB();
 
 router.post(forgotPassword);
 
-export const POST = async (req: NextRequest, ctx: RequestContext) => {
+export const POST = async (req: NextRequest, ctx: RequestContext):Promise<any> => {
   return router.run(req, ctx);
 };
