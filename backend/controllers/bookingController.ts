@@ -1,3 +1,7 @@
+"use server"
+export const dynamic = "force-dynamic"
+export const revalidate = 0
+
 import { NextRequest, NextResponse } from "next/server";
 import { catchAsyncError } from "../middlewares/catchAsyncError";
 import Booking, { IBooking } from "../models/booking";
