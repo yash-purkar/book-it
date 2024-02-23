@@ -9,7 +9,7 @@ import { upload_file as uploadImageToCloudinary } from "../utils/cloudinary";
 // get all rooms  - api/rooms
 export const getAllRooms = catchAsyncError(async (request: NextRequest) => {
   // For pagination, 8 results per page
-  const resultsPerPage: number = 4;
+  const resultsPerPage: number = 3;
 
   // To read the url params
   const { searchParams } = new URL(request.url);
