@@ -11,3 +11,15 @@
 .back-to-search:hover {
   color: #e61e4d;
 }
+
+.roomsContainer{
+ display: grid;
+ grid-template-columns: 1fr;
+ place-items: center;
+}
+
+@media (min-width:720px) {
+  .roomsContainer{
+    grid-template-columns: repeat(3,1fr);
+  }
+}
