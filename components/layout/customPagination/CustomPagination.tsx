@@ -22,7 +22,7 @@ export const CustomPagination = ({
   const handleChange = (currentPage: string) => {
     if (typeof window !== undefined) {
       queryParams = new URLSearchParams(window.location.search);
-      
+
       // If page is there in searc query
       if (queryParams.has("page")) {
           queryParams.set("page", currentPage);
@@ -37,7 +37,7 @@ export const CustomPagination = ({
   };
 
   return (
-    <div className="d-flex justify-content-center mt-5">
+    <div className="d-flex justify-content-center">
       {
         resultsPerPage < filteredRoomsCount && 
       <Pagination

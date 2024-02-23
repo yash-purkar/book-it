@@ -19,7 +19,7 @@ export const Home = ({data}:HomeProps) => {
 
   return (
     <div>
-      <section id="rooms" className="container mt-5">
+      <section id="rooms" className="container mt-3">
         <h2 className={`mb-3 ml-2 ${styles["stays-heading"]}`}>All Rooms</h2>
         <Link href="/search" className={`ml-2 ${styles["back-to-search"]}`}>
           <i className="fa fa-arrow-left"></i> Back to Search

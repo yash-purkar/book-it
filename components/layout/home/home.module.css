@@ -1,5 +1,6 @@
 .stays-heading {
   font-weight: 700;
+  color: #e4caca;
 }
 
 .back-to-search {
@@ -19,6 +20,12 @@
 }
 
 @media (min-width:720px) {
+  .roomsContainer{
+    grid-template-columns: repeat(2,1fr);
+  }
+}
+
+@media (min-width:1024px) {
   .roomsContainer{
     grid-template-columns: repeat(3,1fr);
   }
